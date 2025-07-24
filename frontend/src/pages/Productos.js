@@ -203,10 +203,6 @@ const Productos = () => {
         return 'success';
     };
 
-    const getInitials = (nombre) => {
-        return nombre.split(' ').map(n => n[0]).join('').toUpperCase();
-    };
-
     const renderCardView = () => (
         <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: 'repeat(auto-fill, minmax(300px, 1fr))' } }}>
             {productos.map((producto) => (

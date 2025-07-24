@@ -3,9 +3,9 @@ import {
     Box, Typography, Paper, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Chip, IconButton, Button, Dialog, DialogTitle,
     DialogContent, DialogActions, TextField, FormControl, InputLabel,
-    Select, MenuItem, Alert, Snackbar, Grid, Card, CardContent
+    Select, MenuItem, Alert, Snackbar, Grid
 } from '@mui/material';
-import { Add, Edit, Delete, Visibility, ShoppingCart } from '@mui/icons-material';
+import { Add, Edit, Delete, Print } from '@mui/icons-material';
 
 const ControlVentas = () => {
     const [ventas, setVentas] = useState([]);

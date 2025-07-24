@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-    Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, IconButton,
-    Chip, Alert, Snackbar, FormControl, InputLabel, Select, MenuItem, Grid,
-    Card, CardContent
+    Box, Typography, Button, Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, Paper, Chip, IconButton, Dialog, DialogTitle,
+    DialogContent, DialogActions, TextField, FormControl, InputLabel,
+    Select, MenuItem, Alert, Snackbar, Grid, Card, CardContent
 } from '@mui/material';
-import {
-    Add, Edit, Delete, Visibility, FilterList,
-    TrendingDown, AttachMoney, Category, Receipt
-} from '@mui/icons-material';
-
-const API_URL = 'http://localhost:4000/api';
+import { Add, Edit, Delete, AttachMoney, Category, Receipt } from '@mui/icons-material';
 
 const SalidasGastos = () => {
     const [gastos, setGastos] = useState([]);
@@ -18,11 +13,11 @@ const SalidasGastos = () => {
     const [editingGasto, setEditingGasto] = useState(null);
     const [formData, setFormData] = useState({
         concepto: '',
-        monto: '',
         categoria: '',
+        monto: '',
         fecha: '',
         proveedor: '',
-        metodoPago: 'Efectivo',
+        metodoPago: 'efectivo',
         estado: 'pendiente'
     });
     const [mensaje, setMensaje] = useState('');
@@ -99,7 +94,7 @@ const SalidasGastos = () => {
                 categoria: '',
                 fecha: new Date().toISOString().split('T')[0],
                 proveedor: '',
-                metodoPago: 'Efectivo',
+                metodoPago: 'efectivo',
                 estado: 'pendiente',
                 descripcion: ''
             });
@@ -116,7 +111,7 @@ const SalidasGastos = () => {
             categoria: '',
             fecha: new Date().toISOString().split('T')[0],
             proveedor: '',
-            metodoPago: 'Efectivo',
+            metodoPago: 'efectivo',
             estado: 'pendiente',
             descripcion: ''
         });
@@ -257,7 +252,7 @@ const SalidasGastos = () => {
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
-                                <TrendingDown sx={{ mr: 2, color: 'error.main' }} />
+                                <AttachMoney sx={{ mr: 2, color: 'error.main' }} />
                                 <Box>
                                     <Typography variant="h6" fontWeight="bold">
                                         ${estadisticas.totalMonto.toLocaleString()}

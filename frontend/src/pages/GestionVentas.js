@@ -1,308 +1,202 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box, Paper, Typography, Button, TextField, Select, MenuItem, Alert, IconButton, Divider, InputLabel, FormControl, Snackbar, List, ListItem, ListItemText, ListItemSecondaryAction
+    Box, Typography, Paper, Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, Chip, IconButton, Button, Dialog, DialogTitle,
+    DialogContent, DialogActions, TextField, FormControl, InputLabel,
+    Select, MenuItem, Alert, Snackbar, Grid
 } from '@mui/material';
-import { Add, RemoveCircle, Search, ShoppingCart, Delete, CheckCircle } from '@mui/icons-material';
-
-const API_URL = 'http://localhost:4000/api';
+import { Add, Edit, Delete, ShoppingCart, AttachMoney } from '@mui/icons-material';
 
 const GestionVentas = () => {
-    // Estados para los campos del formulario
-    const [clienteDoc, setClienteDoc] = useState('');
-    const [nombreCliente, setNombreCliente] = useState('');
-    const [documento, setDocumento] = useState('');
-    const [fechaVencimiento, setFechaVencimiento] = useState('');
-    const [metodoPago, setMetodoPago] = useState('Efectivo');
-    const [descuento, setDescuento] = useState(0);
-    const [carrito, setCarrito] = useState([]);
-    const [productos, setProductos] = useState([]);
-    const [productoSeleccionado, setProductoSeleccionado] = useState('');
-    const [cantidad, setCantidad] = useState(1);
+    const [ventas, setVentas] = useState([]);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [editingVenta, setEditingVenta] = useState(null);
+    const [formData, setFormData] = useState({
+        cliente: '',
+        productos: '',
+        total: '',
+        metodoPago: 'efectivo',
+        estado: 'pendiente'
+    });
     const [mensaje, setMensaje] = useState('');
-    const [error, setError] = useState('');
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [snackbarType, setSnackbarType] = useState('success');
 
-    // Cargar productos al inicio
-    useEffect(() => {
-        fetch(`${API_URL}/productos`)
-            .then(res => res.json())
-            .then(data => setProductos(data));
-    }, []);
-
-    // Buscar cliente por documento
-    const buscarCliente = async () => {
-        setError('');
-        setMensaje('');
-        if (!clienteDoc) return;
-        try {
-            const res = await fetch(`${API_URL}/clientes/buscar?documento=${clienteDoc}`);
-            if (!res.ok) throw new Error('Cliente no encontrado');
-            const data = await res.json();
-            setNombreCliente(data.nombre);
-            setDocumento(data.documento);
-            setSnackbarType('success');
-            setMensaje('Cliente encontrado');
-            setOpenSnackbar(true);
-        } catch (err) {
-            setNombreCliente('');
-            setDocumento('');
-            setSnackbarType('error');
-            setMensaje('Cliente no encontrado');
-            setOpenSnackbar(true);
-        }
+    const handleInputChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
     };
 
-    // Agregar producto al carrito
-    const agregarProducto = () => {
-        setError('');
-        setMensaje('');
-        if (!productoSeleccionado || cantidad < 1) return;
-        const prod = productos.find(p => p.id === parseInt(productoSeleccionado));
-        if (!prod) return;
-        const existe = carrito.find(p => p.id === prod.id);
-        if (existe) {
-            setCarrito(carrito.map(p => p.id === prod.id ? { ...p, cantidad: p.cantidad + parseInt(cantidad) } : p));
+    const handleSave = () => {
+        if (editingVenta) {
+            setVentas(prev => prev.map(v => v.id === editingVenta.id ? { ...formData, id: editingVenta.id } : v));
         } else {
-            setCarrito([...carrito, { ...prod, cantidad: parseInt(cantidad) }]);
+            setVentas(prev => [...prev, { ...formData, id: Date.now() }]);
         }
-        setProductoSeleccionado('');
-        setCantidad(1);
-        setSnackbarType('success');
-        setMensaje('Producto agregado al carrito');
-        setOpenSnackbar(true);
+        setMensaje('Venta guardada exitosamente');
+        handleClose();
     };
 
-    // Quitar producto del carrito
-    const quitarProducto = (id) => {
-        setCarrito(carrito.filter(p => p.id !== id));
-        setSnackbarType('info');
-        setMensaje('Producto eliminado del carrito');
-        setOpenSnackbar(true);
+    const handleEdit = (venta) => {
+        setEditingVenta(venta);
+        setFormData(venta);
+        setOpenDialog(true);
     };
 
-    // Registrar venta
-    const registrarVenta = async () => {
-        setError('');
-        setMensaje('');
-        if (!nombreCliente || !documento || carrito.length === 0) {
-            setSnackbarType('error');
-            setMensaje('Completa los datos del cliente y agrega productos.');
-            setOpenSnackbar(true);
-            return;
-        }
-        const venta = {
-            cliente: { nombre: nombreCliente, documento },
-            fechaVencimiento,
-            metodoPago,
-            descuento: parseFloat(descuento),
-            productos: carrito,
-            total: subtotal - descuentoTotal
-        };
-        try {
-            const res = await fetch(`${API_URL}/ventas`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(venta)
-            });
-            if (!res.ok) throw new Error('Error al registrar venta');
-            setSnackbarType('success');
-            setMensaje('¡Venta registrada exitosamente!');
-            setOpenSnackbar(true);
-            limpiarFormulario();
-        } catch (err) {
-            setSnackbarType('error');
-            setMensaje('Error al registrar venta');
-            setOpenSnackbar(true);
-        }
+    const handleDelete = (id) => {
+        setVentas(prev => prev.filter(v => v.id !== id));
+        setMensaje('Venta eliminada exitosamente');
     };
 
-    // Limpiar formulario
-    const limpiarFormulario = () => {
-        setClienteDoc('');
-        setNombreCliente('');
-        setDocumento('');
-        setFechaVencimiento('');
-        setMetodoPago('Efectivo');
-        setDescuento(0);
-        setCarrito([]);
-        setProductoSeleccionado('');
-        setCantidad(1);
+    const handleClose = () => {
+        setOpenDialog(false);
+        setEditingVenta(null);
+        setFormData({
+            cliente: '',
+            productos: '',
+            total: '',
+            metodoPago: 'efectivo',
+            estado: 'pendiente'
+        });
     };
-
-    // Cálculos
-    const subtotal = carrito.reduce((acc, prod) => acc + prod.precio * prod.cantidad, 0);
-    const descuentoTotal = subtotal * (descuento / 100);
-    const totalFinal = subtotal - descuentoTotal;
 
     return (
-        <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-            <Paper elevation={3} sx={{ p: 3, flex: 2, minWidth: 350, maxWidth: 600 }}>
-                <Typography variant="h5" fontWeight="bold" mb={2} display="flex" alignItems="center" gap={1}>
-                    <ShoppingCart color="primary" /> Gestión de Ventas
+        <Box sx={{ p: 3 }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+                <Typography variant="h4" fontWeight="bold">
+                    Gestión de Ventas
                 </Typography>
-                <Alert severity="info" sx={{ mb: 2 }}>
-                    Ingresa los datos del cliente, agrega productos y registra la venta.
-                </Alert>
-                <Box component="form" autoComplete="off" onSubmit={e => e.preventDefault()}>
-                    <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                        <TextField
-                            label="Buscar Cliente por Documento"
-                            value={clienteDoc}
-                            onChange={e => setClienteDoc(e.target.value)}
-                            size="small"
-                            fullWidth
-                        />
-                        <Button variant="contained" color="primary" startIcon={<Search />} onClick={buscarCliente} sx={{ minWidth: 120 }}>
-                            Buscar
-                        </Button>
-                    </Box>
-                    <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                        <TextField
-                            label="Nombre del cliente"
-                            value={nombreCliente}
-                            InputProps={{ readOnly: true }}
-                            size="small"
-                            fullWidth
-                        />
-                        <TextField
-                            label="Documento encontrado"
-                            value={documento}
-                            InputProps={{ readOnly: true }}
-                            size="small"
-                            fullWidth
-                        />
-                    </Box>
-                    <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                        <TextField
-                            label="Fecha de vencimiento"
-                            type="date"
-                            value={fechaVencimiento}
-                            onChange={e => setFechaVencimiento(e.target.value)}
-                            size="small"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                        />
-                        <FormControl size="small" fullWidth>
-                            <InputLabel>Método de pago</InputLabel>
-                            <Select
-                                label="Método de pago"
-                                value={metodoPago}
-                                onChange={e => setMetodoPago(e.target.value)}
-                            >
-                                <MenuItem value="Efectivo">Efectivo</MenuItem>
-                                <MenuItem value="Tarjeta">Tarjeta</MenuItem>
-                                <MenuItem value="Transferencia">Transferencia</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            label="Descuento global (%)"
-                            type="number"
-                            inputProps={{ min: 0, max: 100 }}
-                            value={descuento}
-                            onChange={e => setDescuento(e.target.value)}
-                            size="small"
-                            fullWidth
-                        />
-                    </Box>
-                    <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                        <FormControl size="small" fullWidth>
-                            <InputLabel>Producto</InputLabel>
-                            <Select
-                                label="Producto"
-                                value={productoSeleccionado}
-                                onChange={e => setProductoSeleccionado(e.target.value)}
-                            >
-                                <MenuItem value="">Selecciona un producto</MenuItem>
-                                {productos.map(p => (
-                                    <MenuItem key={p.id} value={p.id}>{p.nombre} (${p.precio})</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            label="Cantidad"
-                            type="number"
-                            inputProps={{ min: 1 }}
-                            value={cantidad}
-                            onChange={e => setCantidad(e.target.value)}
-                            size="small"
-                            sx={{ width: 100 }}
-                        />
-                        <Button variant="contained" color="success" startIcon={<Add />} onClick={agregarProducto}>
-                            Agregar
-                        </Button>
-                    </Box>
-                </Box>
-                <Divider sx={{ my: 2 }} />
-                <Typography variant="h6" mb={1} display="flex" alignItems="center" gap={1}>
-                    <ShoppingCart fontSize="small" /> Mi Carrito
-                </Typography>
-                {carrito.length === 0 ? (
-                    <Alert severity="warning">No hay productos seleccionados.</Alert>
-                ) : (
-                    <List>
-                        {carrito.map((prod, idx) => (
-                            <ListItem key={idx} secondaryAction={
-                                <IconButton edge="end" color="error" onClick={() => quitarProducto(prod.id)}>
-                                    <Delete />
-                                </IconButton>
-                            }>
-                                <ListItemText
-                                    primary={`${prod.nombre} x${prod.cantidad}`}
-                                    secondary={`$${prod.precio} c/u`}
-                                />
-                            </ListItem>
+                <Button
+                    variant="contained"
+                    startIcon={<Add />}
+                    onClick={() => setOpenDialog(true)}
+                >
+                    Nueva Venta
+                </Button>
+            </Box>
+
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Cliente</TableCell>
+                            <TableCell>Productos</TableCell>
+                            <TableCell>Total</TableCell>
+                            <TableCell>Método de Pago</TableCell>
+                            <TableCell>Estado</TableCell>
+                            <TableCell>Acciones</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {ventas.map((venta) => (
+                            <TableRow key={venta.id}>
+                                <TableCell>{venta.cliente}</TableCell>
+                                <TableCell>{venta.productos}</TableCell>
+                                <TableCell>${venta.total}</TableCell>
+                                <TableCell>{venta.metodoPago}</TableCell>
+                                <TableCell>
+                                    <Chip
+                                        label={venta.estado}
+                                        color={venta.estado === 'completada' ? 'success' : 'warning'}
+                                        size="small"
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => handleEdit(venta)}>
+                                        <Edit />
+                                    </IconButton>
+                                    <IconButton onClick={() => handleDelete(venta.id)}>
+                                        <Delete />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </List>
-                )}
-                <Box sx={{ mt: 2, mb: 1 }}>
-                    <Typography>Subtotal: <b>${subtotal.toFixed(2)}</b></Typography>
-                    <Typography>Descuento: <b>-${descuentoTotal.toFixed(2)}</b></Typography>
-                    <Typography color="primary.main" fontWeight="bold">Total Final: ${totalFinal.toFixed(2)}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-                    <Button variant="contained" color="success" startIcon={<CheckCircle />} onClick={registrarVenta}>
-                        Registrar Venta
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            <Dialog open={openDialog} onClose={handleClose} maxWidth="md" fullWidth>
+                <DialogTitle>
+                    {editingVenta ? 'Editar Venta' : 'Nueva Venta'}
+                </DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2} sx={{ mt: 1 }}>
+                        <Grid xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                label="Cliente"
+                                name="cliente"
+                                value={formData.cliente}
+                                onChange={handleInputChange}
+                                margin="normal"
+                            />
+                        </Grid>
+                        <Grid xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                label="Productos"
+                                name="productos"
+                                value={formData.productos}
+                                onChange={handleInputChange}
+                                margin="normal"
+                            />
+                        </Grid>
+                        <Grid xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                label="Total"
+                                name="total"
+                                value={formData.total}
+                                onChange={handleInputChange}
+                                margin="normal"
+                            />
+                        </Grid>
+                        <Grid xs={12} sm={6}>
+                            <FormControl fullWidth margin="normal">
+                                <InputLabel>Método de Pago</InputLabel>
+                                <Select
+                                    name="metodoPago"
+                                    value={formData.metodoPago}
+                                    onChange={handleInputChange}
+                                    label="Método de Pago"
+                                >
+                                    <MenuItem value="efectivo">Efectivo</MenuItem>
+                                    <MenuItem value="tarjeta">Tarjeta</MenuItem>
+                                    <MenuItem value="transferencia">Transferencia</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid xs={12}>
+                            <FormControl fullWidth margin="normal">
+                                <InputLabel>Estado</InputLabel>
+                                <Select
+                                    name="estado"
+                                    value={formData.estado}
+                                    onChange={handleInputChange}
+                                    label="Estado"
+                                >
+                                    <MenuItem value="pendiente">Pendiente</MenuItem>
+                                    <MenuItem value="completada">Completada</MenuItem>
+                                    <MenuItem value="cancelada">Cancelada</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancelar</Button>
+                    <Button onClick={handleSave} variant="contained">
+                        Guardar
                     </Button>
-                    <Button variant="outlined" color="primary" onClick={limpiarFormulario}>
-                        Limpiar Formulario
-                    </Button>
-                </Box>
-            </Paper>
-            <Paper elevation={3} sx={{ p: 3, flex: 1, minWidth: 300 }}>
-                <Typography variant="h6" fontWeight="bold" mb={2}>Comprobante de Pago</Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Box mb={2}>
-                    <Typography><b>Cliente:</b> {nombreCliente || 'No asignado'}</Typography>
-                    <Typography><b>Documento:</b> {documento || 'No disponible'}</Typography>
-                    <Typography><b>Pago:</b> {metodoPago}</Typography>
-                    <Typography><b>Válido hasta:</b> {fechaVencimiento || '-'}</Typography>
-                </Box>
-                <Divider sx={{ mb: 2 }} />
-                <Typography fontWeight="bold">Productos:</Typography>
-                {carrito.length === 0 ? (
-                    <Typography color="text.secondary">No hay productos seleccionados.</Typography>
-                ) : (
-                    <List dense>
-                        {carrito.map((prod, idx) => (
-                            <ListItem key={idx}>
-                                <ListItemText primary={`${prod.nombre} x${prod.cantidad}`} />
-                            </ListItem>
-                        ))}
-                    </List>
-                )}
-                <Divider sx={{ my: 2 }} />
-                <Typography>Subtotal: <b>${subtotal.toFixed(2)}</b></Typography>
-                <Typography>Descuento: <b>-${descuentoTotal.toFixed(2)}</b></Typography>
-                <Typography color="success.main" fontWeight="bold">Total a pagar: ${totalFinal.toFixed(2)}</Typography>
-            </Paper>
+                </DialogActions>
+            </Dialog>
+
             <Snackbar
-                open={openSnackbar}
-                autoHideDuration={3000}
-                onClose={() => setOpenSnackbar(false)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={!!mensaje}
+                autoHideDuration={6000}
+                onClose={() => setMensaje('')}
             >
-                <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarType} sx={{ width: '100%' }}>
+                <Alert onClose={() => setMensaje('')} severity="success">
                     {mensaje}
                 </Alert>
             </Snackbar>

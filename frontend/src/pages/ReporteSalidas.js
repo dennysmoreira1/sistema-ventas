@@ -1,124 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    Box, Typography, Paper, Card, CardContent, Grid,
-    TextField, Button, FormControl, InputLabel, Select,
-    MenuItem, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Chip, Alert, Snackbar
+    Box, Typography, Paper, Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, Chip, IconButton, Button, Dialog, DialogTitle,
+    DialogContent, DialogActions, TextField, FormControl, InputLabel,
+    Select, MenuItem, Alert, Snackbar, Grid, Card, CardContent
 } from '@mui/material';
-import {
-    TrendingDown, FilterList, Download, Print,
-    AttachMoney, Category, Receipt, TrendingUp
-} from '@mui/icons-material';
+import { Search, Print, FilterList, Receipt, AttachMoney, TrendingUp, Category } from '@mui/icons-material';
 
 const ReporteSalidas = () => {
-    const [filtros, setFiltros] = useState({
-        fechaInicio: '',
-        fechaFin: '',
-        categoria: 'todas',
-        proveedor: 'todos',
-        estado: 'todos'
+    const [salidas, setSalidas] = useState([]);
+    const [filtro, setFiltro] = useState({
+        tipo: '',
+        estado: '',
+        fecha: ''
     });
-
-    const [estadisticas, setEstadisticas] = useState({
-        totalGastos: 45,
-        totalMonto: 125000,
-        gastosPagados: 38,
-        gastosPendientes: 7,
-        promedioGasto: 2778,
-        gastoMasAlto: 8500,
-        gastoMasBajo: 150
-    });
-
-    const [gastos] = useState([
-        {
-            id: 1,
-            concepto: 'Material de oficina',
-            categoria: 'Oficina',
-            monto: 2500,
-            fecha: '2024-01-15',
-            proveedor: 'Papelería Central',
-            metodoPago: 'Transferencia',
-            estado: 'pagado'
-        },
-        {
-            id: 2,
-            concepto: 'Servicios de internet',
-            categoria: 'Tecnología',
-            monto: 3500,
-            fecha: '2024-01-10',
-            proveedor: 'Telecom SA',
-            metodoPago: 'Débito automático',
-            estado: 'pagado'
-        },
-        {
-            id: 3,
-            concepto: 'Mantenimiento de equipos',
-            categoria: 'Mantenimiento',
-            monto: 8500,
-            fecha: '2024-01-08',
-            proveedor: 'Técnicos Pro',
-            metodoPago: 'Efectivo',
-            estado: 'pendiente'
-        },
-        {
-            id: 4,
-            concepto: 'Publicidad digital',
-            categoria: 'Marketing',
-            monto: 4200,
-            fecha: '2024-01-12',
-            proveedor: 'Ads Digital',
-            metodoPago: 'Tarjeta de crédito',
-            estado: 'pagado'
-        },
-        {
-            id: 5,
-            concepto: 'Seguros empresariales',
-            categoria: 'Seguros',
-            monto: 6800,
-            fecha: '2024-01-05',
-            proveedor: 'Seguros Total',
-            metodoPago: 'Transferencia',
-            estado: 'pagado'
-        }
-    ]);
-
     const [mensaje, setMensaje] = useState('');
 
     const handleFiltroChange = (e) => {
-        setFiltros({
-            ...filtros,
+        setFiltro({
+            ...filtro,
             [e.target.name]: e.target.value
         });
     };
 
-    const handleExportar = () => {
-        setMensaje('Reporte exportado exitosamente');
-        setTimeout(() => setMensaje(''), 3000);
-    };
-
-    const handleImprimir = () => {
-        setMensaje('Reporte enviado a impresión');
-        setTimeout(() => setMensaje(''), 3000);
-    };
-
-    const getEstadoColor = (estado) => {
-        switch (estado) {
-            case 'pagado': return 'success';
-            case 'pendiente': return 'warning';
-            case 'cancelado': return 'error';
-            default: return 'default';
-        }
-    };
-
-    const getCategoriaColor = (categoria) => {
-        switch (categoria) {
-            case 'Oficina': return 'primary';
-            case 'Tecnología': return 'info';
-            case 'Marketing': return 'secondary';
-            case 'Mantenimiento': return 'warning';
-            case 'Seguros': return 'error';
-            default: return 'default';
-        }
+    const handlePrint = () => {
+        setMensaje('Generando reporte...');
     };
 
     return (
@@ -127,125 +33,61 @@ const ReporteSalidas = () => {
                 Reporte de Salidas y Gastos
             </Typography>
 
-            {/* Filtros */}
-            <Paper sx={{ p: 2, mb: 3 }}>
-                <Typography variant="h6" gutterBottom>
-                    <FilterList sx={{ mr: 1, verticalAlign: 'middle' }} />
-                    Filtros del Reporte
-                </Typography>
-                <Grid container spacing={2}>
-                    <Grid xs={12} sm={6} md={3}>
-                        <TextField
-                            fullWidth
-                            label="Fecha Inicio"
-                            name="fechaInicio"
-                            type="date"
-                            value={filtros.fechaInicio}
-                            onChange={handleFiltroChange}
-                            InputLabelProps={{ shrink: true }}
-                        />
-                    </Grid>
-                    <Grid xs={12} sm={6} md={3}>
-                        <TextField
-                            fullWidth
-                            label="Fecha Fin"
-                            name="fechaFin"
-                            type="date"
-                            value={filtros.fechaFin}
-                            onChange={handleFiltroChange}
-                            InputLabelProps={{ shrink: true }}
-                        />
-                    </Grid>
-                    <Grid xs={12} sm={6} md={3}>
-                        <FormControl fullWidth>
-                            <InputLabel>Categoría</InputLabel>
-                            <Select
-                                name="categoria"
-                                value={filtros.categoria}
-                                onChange={handleFiltroChange}
-                                label="Categoría"
-                            >
-                                <MenuItem value="todas">Todas</MenuItem>
-                                <MenuItem value="Oficina">Oficina</MenuItem>
-                                <MenuItem value="Tecnología">Tecnología</MenuItem>
-                                <MenuItem value="Marketing">Marketing</MenuItem>
-                                <MenuItem value="Mantenimiento">Mantenimiento</MenuItem>
-                                <MenuItem value="Seguros">Seguros</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid xs={12} sm={6} md={3}>
-                        <FormControl fullWidth>
-                            <InputLabel>Estado</InputLabel>
-                            <Select
-                                name="estado"
-                                value={filtros.estado}
-                                onChange={handleFiltroChange}
-                                label="Estado"
-                            >
-                                <MenuItem value="todos">Todos</MenuItem>
-                                <MenuItem value="pagado">Pagado</MenuItem>
-                                <MenuItem value="pendiente">Pendiente</MenuItem>
-                                <MenuItem value="cancelado">Cancelado</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                </Grid>
-            </Paper>
-
-            {/* Estadísticas */}
             <Grid container spacing={3} sx={{ mb: 3 }}>
                 <Grid xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
-                                <Receipt sx={{ mr: 2, color: 'primary.main' }} />
+                                <Receipt sx={{ mr: 2, color: 'error.main' }} />
                                 <Box>
                                     <Typography variant="h6" fontWeight="bold">
-                                        {estadisticas.totalGastos}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
                                         Total Gastos
                                     </Typography>
+                                    <Typography variant="h4" color="error.main">
+                                        $125,000
+                                    </Typography>
                                 </Box>
                             </Box>
                         </CardContent>
                     </Card>
                 </Grid>
+
                 <Grid xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
-                                <AttachMoney sx={{ mr: 2, color: 'error.main' }} />
+                                <AttachMoney sx={{ mr: 2, color: 'success.main' }} />
                                 <Box>
                                     <Typography variant="h6" fontWeight="bold">
-                                        ${estadisticas.totalMonto.toLocaleString()}
+                                        Gastos Pagados
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Total Monto
+                                    <Typography variant="h4" color="success.main">
+                                        $98,500
                                     </Typography>
                                 </Box>
                             </Box>
                         </CardContent>
                     </Card>
                 </Grid>
+
                 <Grid xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
-                                <TrendingUp sx={{ mr: 2, color: 'success.main' }} />
+                                <TrendingUp sx={{ mr: 2, color: 'info.main' }} />
                                 <Box>
                                     <Typography variant="h6" fontWeight="bold">
-                                        ${estadisticas.promedioGasto.toLocaleString()}
+                                        Promedio
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Promedio por Gasto
+                                    <Typography variant="h4" color="info.main">
+                                        $2,778
                                     </Typography>
                                 </Box>
                             </Box>
                         </CardContent>
                     </Card>
                 </Grid>
+
                 <Grid xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
@@ -253,10 +95,10 @@ const ReporteSalidas = () => {
                                 <Category sx={{ mr: 2, color: 'warning.main' }} />
                                 <Box>
                                     <Typography variant="h6" fontWeight="bold">
-                                        {estadisticas.gastosPendientes}
+                                        Categorías
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Pendientes
+                                    <Typography variant="h4" color="warning.main">
+                                        8
                                     </Typography>
                                 </Box>
                             </Box>
@@ -265,25 +107,74 @@ const ReporteSalidas = () => {
                 </Grid>
             </Grid>
 
-            {/* Acciones */}
-            <Box display="flex" gap={2} mb={3}>
-                <Button
-                    variant="contained"
-                    startIcon={<Download />}
-                    onClick={handleExportar}
-                >
-                    Exportar Reporte
-                </Button>
-                <Button
-                    variant="outlined"
-                    startIcon={<Print />}
-                    onClick={handleImprimir}
-                >
-                    Imprimir
-                </Button>
-            </Box>
+            <Paper sx={{ p: 3, mb: 3 }}>
+                <Typography variant="h6" gutterBottom>
+                    Filtros
+                </Typography>
+                <Grid container spacing={2}>
+                    <Grid xs={12} sm={6} md={3}>
+                        <FormControl fullWidth>
+                            <InputLabel>Tipo de Gasto</InputLabel>
+                            <Select
+                                name="tipo"
+                                value={filtro.tipo}
+                                onChange={handleFiltroChange}
+                                label="Tipo de Gasto"
+                            >
+                                <MenuItem value="">Todos</MenuItem>
+                                <MenuItem value="oficina">Oficina</MenuItem>
+                                <MenuItem value="tecnologia">Tecnología</MenuItem>
+                                <MenuItem value="marketing">Marketing</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid xs={12} sm={6} md={3}>
+                        <FormControl fullWidth>
+                            <InputLabel>Estado</InputLabel>
+                            <Select
+                                name="estado"
+                                value={filtro.estado}
+                                onChange={handleFiltroChange}
+                                label="Estado"
+                            >
+                                <MenuItem value="">Todos</MenuItem>
+                                <MenuItem value="pagado">Pagado</MenuItem>
+                                <MenuItem value="pendiente">Pendiente</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid xs={12} sm={6} md={3}>
+                        <TextField
+                            fullWidth
+                            label="Fecha"
+                            name="fecha"
+                            type="date"
+                            value={filtro.fecha}
+                            onChange={handleFiltroChange}
+                            InputLabelProps={{ shrink: true }}
+                        />
+                    </Grid>
+                    <Grid xs={12} sm={6} md={3}>
+                        <Box display="flex" gap={1}>
+                            <Button
+                                variant="contained"
+                                startIcon={<Search />}
+                                fullWidth
+                            >
+                                Buscar
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                startIcon={<Print />}
+                                onClick={handlePrint}
+                            >
+                                Imprimir
+                            </Button>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Paper>
 
-            {/* Tabla de gastos */}
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -293,59 +184,36 @@ const ReporteSalidas = () => {
                             <TableCell>Monto</TableCell>
                             <TableCell>Fecha</TableCell>
                             <TableCell>Proveedor</TableCell>
-                            <TableCell>Método Pago</TableCell>
                             <TableCell>Estado</TableCell>
+                            <TableCell>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {gastos.map((gasto) => (
-                            <TableRow key={gasto.id}>
-                                <TableCell>
-                                    <Typography variant="subtitle2" fontWeight="bold">
-                                        {gasto.concepto}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Chip
-                                        label={gasto.categoria}
-                                        color={getCategoriaColor(gasto.categoria)}
-                                        size="small"
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <Typography variant="body2" fontWeight="bold">
-                                        ${gasto.monto.toLocaleString()}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    {new Date(gasto.fecha).toLocaleDateString()}
-                                </TableCell>
-                                <TableCell>
-                                    {gasto.proveedor}
-                                </TableCell>
-                                <TableCell>
-                                    {gasto.metodoPago}
-                                </TableCell>
-                                <TableCell>
-                                    <Chip
-                                        label={gasto.estado}
-                                        color={getEstadoColor(gasto.estado)}
-                                        size="small"
-                                    />
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        <TableRow>
+                            <TableCell>Material de oficina</TableCell>
+                            <TableCell>Oficina</TableCell>
+                            <TableCell>$2,500</TableCell>
+                            <TableCell>2024-01-15</TableCell>
+                            <TableCell>Papelería Central</TableCell>
+                            <TableCell>
+                                <Chip label="Pagado" color="success" size="small" />
+                            </TableCell>
+                            <TableCell>
+                                <IconButton>
+                                    <Print />
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
 
-            {/* Snackbar para mensajes */}
             <Snackbar
                 open={!!mensaje}
-                autoHideDuration={3000}
+                autoHideDuration={6000}
                 onClose={() => setMensaje('')}
             >
-                <Alert severity="success" onClose={() => setMensaje('')}>
+                <Alert onClose={() => setMensaje('')} severity="info">
                     {mensaje}
                 </Alert>
             </Snackbar>
@@ -353,4 +221,4 @@ const ReporteSalidas = () => {
     );
 };
 
-export default ReporteSalidas;
+export default ReporteSalidas; 

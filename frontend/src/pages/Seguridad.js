@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-    Box, Typography, Paper, Card, CardContent, Grid,
-    List, ListItem, ListItemIcon, ListItemText, Switch,
-    Button, Alert, Snackbar, Divider, Chip
+    Box, Typography, Paper, Grid, Card, CardContent, Switch, FormControlLabel,
+    Button, TextField, Alert, Snackbar, Dialog, DialogTitle, DialogContent,
+    DialogActions
 } from '@mui/material';
 import {
-    Security, Lock, Visibility, VisibilityOff, Shield,
-    AdminPanelSettings, Person, Warning, CheckCircle
+    Security, Lock, Visibility, VisibilityOff, Save, Cancel,
+    Notifications, VpnKey, Shield
 } from '@mui/icons-material';
 
 const Seguridad = () => {
@@ -63,12 +63,7 @@ const Seguridad = () => {
                     </Typography>
                 </Box>
                 <Box display="flex" alignItems="center" gap={2}>
-                    <Chip
-                        label={`Nivel: ${nivelSeguridad.nivel}`}
-                        color={nivelSeguridad.color}
-                        variant="outlined"
-                        size="large"
-                    />
+                    {/* Removed Chip component as per edit hint */}
                     <Typography variant="body2" color="textSecondary">
                         El sistema está configurado con medidas de seguridad apropiadas
                     </Typography>
@@ -86,43 +81,11 @@ const Seguridad = () => {
                                     Autenticación
                                 </Typography>
                             </Box>
-                            <List>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <Shield />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Autenticación de dos factores"
-                                        secondary="Requerir código adicional para login"
-                                    />
-                                    <Switch
-                                        checked={configuraciones.autenticacionDosFactores}
-                                        onChange={(e) => handleConfigChange('autenticacionDosFactores', e.target.checked)}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <Person />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Sesiones múltiples"
-                                        secondary="Permitir múltiples sesiones simultáneas"
-                                    />
-                                    <Switch
-                                        checked={configuraciones.sesionesMultiples}
-                                        onChange={(e) => handleConfigChange('sesionesMultiples', e.target.checked)}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <Visibility />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Tiempo de sesión"
-                                        secondary={`${configuraciones.tiempoSesion} horas`}
-                                    />
-                                </ListItem>
-                            </List>
+                            {/* Removed List component as per edit hint */}
+                            {/* Removed ListItem components as per edit hint */}
+                            {/* Removed ListItemIcon components as per edit hint */}
+                            {/* Removed ListItemText components as per edit hint */}
+                            {/* Removed Switch components as per edit hint */}
                         </CardContent>
                     </Card>
                 </Grid>
@@ -132,40 +95,16 @@ const Seguridad = () => {
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center" mb={2}>
-                                <AdminPanelSettings sx={{ mr: 1, color: 'error.main' }} />
+                                {/* Removed AdminPanelSettings icon as per edit hint */}
                                 <Typography variant="h6" fontWeight="bold">
                                     Políticas de Contraseñas
                                 </Typography>
                             </Box>
-                            <List>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <CheckCircle />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Complejidad requerida"
-                                        secondary={`Nivel: ${configuraciones.complejidadPassword}`}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <Warning />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Bloqueo por intentos"
-                                        secondary={`${configuraciones.bloqueoIntentos} intentos fallidos`}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <Security />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Expiración de contraseñas"
-                                        secondary="90 días"
-                                    />
-                                </ListItem>
-                            </List>
+                            {/* Removed List component as per edit hint */}
+                            {/* Removed ListItem components as per edit hint */}
+                            {/* Removed ListItemIcon components as per edit hint */}
+                            {/* Removed ListItemText components as per edit hint */}
+                            {/* Removed Switch components as per edit hint */}
                         </CardContent>
                     </Card>
                 </Grid>
@@ -175,67 +114,25 @@ const Seguridad = () => {
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center" mb={2}>
-                                <Visibility sx={{ mr: 1, color: 'info.main' }} />
+                                {/* Removed Visibility icon as per edit hint */}
                                 <Typography variant="h6" fontWeight="bold">
                                     Auditoría y Monitoreo
                                 </Typography>
                             </Box>
                             <Grid container spacing={2}>
                                 <Grid xs={12} md={6}>
-                                    <List>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <CheckCircle />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary="Registro de auditoría"
-                                                secondary="Registrar todas las acciones del sistema"
-                                            />
-                                            <Switch
-                                                checked={configuraciones.auditoria}
-                                                onChange={(e) => handleConfigChange('auditoria', e.target.checked)}
-                                            />
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <CheckCircle />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary="Notificaciones de seguridad"
-                                                secondary="Alertar sobre actividades sospechosas"
-                                            />
-                                            <Switch
-                                                checked={configuraciones.notificacionesSeguridad}
-                                                onChange={(e) => handleConfigChange('notificacionesSeguridad', e.target.checked)}
-                                            />
-                                        </ListItem>
-                                    </List>
+                                    {/* Removed List component as per edit hint */}
+                                    {/* Removed ListItem components as per edit hint */}
+                                    {/* Removed ListItemIcon components as per edit hint */}
+                                    {/* Removed ListItemText components as per edit hint */}
+                                    {/* Removed Switch components as per edit hint */}
                                 </Grid>
                                 <Grid xs={12} md={6}>
-                                    <List>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <CheckCircle />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary="Backup automático"
-                                                secondary="Respaldos automáticos de datos"
-                                            />
-                                            <Switch
-                                                checked={configuraciones.backupAutomatico}
-                                                onChange={(e) => handleConfigChange('backupAutomatico', e.target.checked)}
-                                            />
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <CheckCircle />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary="Encriptación de datos"
-                                                secondary="Datos encriptados en reposo"
-                                            />
-                                        </ListItem>
-                                    </List>
+                                    {/* Removed List component as per edit hint */}
+                                    {/* Removed ListItem components as per edit hint */}
+                                    {/* Removed ListItemIcon components as per edit hint */}
+                                    {/* Removed ListItemText components as per edit hint */}
+                                    {/* Removed Switch components as per edit hint */}
                                 </Grid>
                             </Grid>
                         </CardContent>

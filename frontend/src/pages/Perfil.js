@@ -1,38 +1,28 @@
 import React, { useState } from 'react';
 import {
-    Box, Typography, Paper, TextField, Button, Avatar, Grid, Card, CardContent,
-    Divider, Chip, Alert, Snackbar, FormControl, InputLabel, Select, MenuItem,
-    IconButton, Dialog, DialogTitle, DialogContent, DialogActions
+    Box, Typography, Paper, Grid, Card, CardContent, Button,
+    TextField, Avatar, Chip, Alert, Snackbar, Dialog, DialogTitle,
+    DialogContent, DialogActions
 } from '@mui/material';
 import {
-    Person, Email, Security, AccessTime, Edit, Save, Cancel,
-    Visibility, VisibilityOff, Lock, Settings
+    Edit, Save, Cancel, Email, Phone, LocationOn,
+    Business, Work, School
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 
 const Perfil = () => {
-    const { user, logout } = useAuth();
-    const [editMode, setEditMode] = useState(false);
-    const [changePasswordMode, setChangePasswordMode] = useState(false);
-    const [mensaje, setMensaje] = useState('');
-    const [error, setError] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [showNewPassword, setShowNewPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+    const { user } = useAuth();
+    const [editing, setEditing] = useState(false);
     const [formData, setFormData] = useState({
         nombre: user?.nombre || '',
         email: user?.email || '',
-        telefono: '',
-        departamento: '',
-        cargo: user?.rol || ''
+        telefono: user?.telefono || '',
+        direccion: user?.direccion || '',
+        empresa: user?.empresa || '',
+        cargo: user?.cargo || '',
+        educacion: user?.educacion || ''
     });
-
-    const [passwordData, setPasswordData] = useState({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-    });
+    const [mensaje, setMensaje] = useState('');
 
     const handleInputChange = (e) => {
         setFormData({
@@ -41,49 +31,23 @@ const Perfil = () => {
         });
     };
 
-    const handlePasswordChange = (e) => {
-        setPasswordData({
-            ...passwordData,
-            [e.target.name]: e.target.value
-        });
-    };
-
     const handleSaveProfile = () => {
         // Aquí iría la lógica para guardar los cambios del perfil
         setMensaje('Perfil actualizado correctamente');
-        setEditMode(false);
+        setEditing(false);
     };
 
     const handleCancelEdit = () => {
         setFormData({
             nombre: user?.nombre || '',
             email: user?.email || '',
-            telefono: '',
-            departamento: '',
-            cargo: user?.rol || ''
+            telefono: user?.telefono || '',
+            direccion: user?.direccion || '',
+            empresa: user?.empresa || '',
+            cargo: user?.cargo || '',
+            educacion: user?.educacion || ''
         });
-        setEditMode(false);
-    };
-
-    const handleChangePassword = () => {
-        if (passwordData.newPassword !== passwordData.confirmPassword) {
-            setError('Las contraseñas no coinciden');
-            return;
-        }
-
-        if (passwordData.newPassword.length < 6) {
-            setError('La nueva contraseña debe tener al menos 6 caracteres');
-            return;
-        }
-
-        // Aquí iría la lógica para cambiar la contraseña
-        setMensaje('Contraseña actualizada correctamente');
-        setChangePasswordMode(false);
-        setPasswordData({
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
-        });
+        setEditing(false);
     };
 
     const getRoleColor = (role) => {
@@ -128,11 +92,11 @@ const Perfil = () => {
                                 Información Personal
                             </Typography>
                             <Button
-                                variant={editMode ? "outlined" : "contained"}
-                                startIcon={editMode ? <Cancel /> : <Edit />}
-                                onClick={() => setEditMode(!editMode)}
+                                variant={editing ? "outlined" : "contained"}
+                                startIcon={editing ? <Cancel /> : <Edit />}
+                                onClick={() => setEditing(!editing)}
                             >
-                                {editMode ? 'Cancelar' : 'Editar'}
+                                {editing ? 'Cancelar' : 'Editar'}
                             </Button>
                         </Box>
 
@@ -144,7 +108,7 @@ const Perfil = () => {
                                     name="nombre"
                                     value={formData.nombre}
                                     onChange={handleInputChange}
-                                    disabled={!editMode}
+                                    disabled={!editing}
                                     margin="normal"
                                 />
                             </Grid>
@@ -156,7 +120,7 @@ const Perfil = () => {
                                     type="email"
                                     value={formData.email}
                                     onChange={handleInputChange}
-                                    disabled={!editMode}
+                                    disabled={!editing}
                                     margin="normal"
                                 />
                             </Grid>
@@ -167,40 +131,57 @@ const Perfil = () => {
                                     name="telefono"
                                     value={formData.telefono}
                                     onChange={handleInputChange}
-                                    disabled={!editMode}
+                                    disabled={!editing}
                                     margin="normal"
                                 />
                             </Grid>
                             <Grid xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Departamento"
-                                    name="departamento"
-                                    value={formData.departamento}
+                                    label="Dirección"
+                                    name="direccion"
+                                    value={formData.direccion}
                                     onChange={handleInputChange}
-                                    disabled={!editMode}
+                                    disabled={!editing}
                                     margin="normal"
                                 />
                             </Grid>
-                            <Grid xs={12}>
-                                <FormControl fullWidth margin="normal">
-                                    <InputLabel>Cargo</InputLabel>
-                                    <Select
-                                        name="cargo"
-                                        value={formData.cargo}
-                                        onChange={handleInputChange}
-                                        label="Cargo"
-                                        disabled={!editMode}
-                                    >
-                                        <MenuItem value="Administrador">Administrador</MenuItem>
-                                        <MenuItem value="Vendedor">Vendedor</MenuItem>
-                                        <MenuItem value="Inventario">Inventario</MenuItem>
-                                    </Select>
-                                </FormControl>
+                            <Grid xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Empresa"
+                                    name="empresa"
+                                    value={formData.empresa}
+                                    onChange={handleInputChange}
+                                    disabled={!editing}
+                                    margin="normal"
+                                />
+                            </Grid>
+                            <Grid xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Cargo"
+                                    name="cargo"
+                                    value={formData.cargo}
+                                    onChange={handleInputChange}
+                                    disabled={!editing}
+                                    margin="normal"
+                                />
+                            </Grid>
+                            <Grid xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Educación"
+                                    name="educacion"
+                                    value={formData.educacion}
+                                    onChange={handleInputChange}
+                                    disabled={!editing}
+                                    margin="normal"
+                                />
                             </Grid>
                         </Grid>
 
-                        {editMode && (
+                        {editing && (
                             <Box display="flex" justifyContent="flex-end" mt={3}>
                                 <Button
                                     variant="contained"
@@ -239,33 +220,32 @@ const Perfil = () => {
                                 />
                             </Box>
 
-                            <Divider sx={{ my: 2 }} />
-
                             <Box>
                                 <Typography variant="body2" color="textSecondary" mb={1}>
                                     <Email sx={{ mr: 1, fontSize: 16, verticalAlign: 'middle' }} />
                                     {user.email}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary" mb={1}>
-                                    <AccessTime sx={{ mr: 1, fontSize: 16, verticalAlign: 'middle' }} />
-                                    Último acceso: {user.ultimoAcceso ? new Date(user.ultimoAcceso).toLocaleString() : 'N/A'}
+                                    <Phone sx={{ mr: 1, fontSize: 16, verticalAlign: 'middle' }} />
+                                    {user.telefono}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary" mb={1}>
+                                    <LocationOn sx={{ mr: 1, fontSize: 16, verticalAlign: 'middle' }} />
+                                    {user.direccion}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary" mb={1}>
+                                    <Business sx={{ mr: 1, fontSize: 16, verticalAlign: 'middle' }} />
+                                    {user.empresa}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary" mb={1}>
+                                    <Work sx={{ mr: 1, fontSize: 16, verticalAlign: 'middle' }} />
+                                    {user.cargo}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary">
-                                    <Security sx={{ mr: 1, fontSize: 16, verticalAlign: 'middle' }} />
-                                    ID: {user.id}
+                                    <School sx={{ mr: 1, fontSize: 16, verticalAlign: 'middle' }} />
+                                    {user.educacion}
                                 </Typography>
                             </Box>
-
-                            <Divider sx={{ my: 2 }} />
-
-                            <Button
-                                fullWidth
-                                variant="outlined"
-                                startIcon={<Lock />}
-                                onClick={() => setChangePasswordMode(true)}
-                            >
-                                Cambiar Contraseña
-                            </Button>
                         </CardContent>
                     </Card>
                 </Grid>
@@ -291,82 +271,6 @@ const Perfil = () => {
                 </Grid>
             </Grid>
 
-            {/* Dialog para cambiar contraseña */}
-            <Dialog open={changePasswordMode} onClose={() => setChangePasswordMode(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>
-                    Cambiar Contraseña
-                </DialogTitle>
-                <DialogContent>
-                    <Box sx={{ pt: 2 }}>
-                        <TextField
-                            fullWidth
-                            label="Contraseña actual"
-                            name="currentPassword"
-                            type={showPassword ? 'text' : 'password'}
-                            value={passwordData.currentPassword}
-                            onChange={handlePasswordChange}
-                            margin="normal"
-                            InputProps={{
-                                endAdornment: (
-                                    <IconButton
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                )
-                            }}
-                        />
-                        <TextField
-                            fullWidth
-                            label="Nueva contraseña"
-                            name="newPassword"
-                            type={showNewPassword ? 'text' : 'password'}
-                            value={passwordData.newPassword}
-                            onChange={handlePasswordChange}
-                            margin="normal"
-                            InputProps={{
-                                endAdornment: (
-                                    <IconButton
-                                        onClick={() => setShowNewPassword(!showNewPassword)}
-                                        edge="end"
-                                    >
-                                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                )
-                            }}
-                        />
-                        <TextField
-                            fullWidth
-                            label="Confirmar nueva contraseña"
-                            name="confirmPassword"
-                            type={showConfirmPassword ? 'text' : 'password'}
-                            value={passwordData.confirmPassword}
-                            onChange={handlePasswordChange}
-                            margin="normal"
-                            InputProps={{
-                                endAdornment: (
-                                    <IconButton
-                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        edge="end"
-                                    >
-                                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                )
-                            }}
-                        />
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setChangePasswordMode(false)}>
-                        Cancelar
-                    </Button>
-                    <Button onClick={handleChangePassword} variant="contained">
-                        Cambiar Contraseña
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
             {/* Snackbars para mensajes */}
             <Snackbar
                 open={!!mensaje}
@@ -375,16 +279,6 @@ const Perfil = () => {
             >
                 <Alert severity="success" onClose={() => setMensaje('')}>
                     {mensaje}
-                </Alert>
-            </Snackbar>
-
-            <Snackbar
-                open={!!error}
-                autoHideDuration={3000}
-                onClose={() => setError('')}
-            >
-                <Alert severity="error" onClose={() => setError('')}>
-                    {error}
                 </Alert>
             </Snackbar>
         </Box>

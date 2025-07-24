@@ -6,7 +6,7 @@ import {
     Select, MenuItem, Alert, Snackbar, Grid, Card, CardContent,
     Avatar, useTheme, useMediaQuery
 } from '@mui/material';
-import { Add, Edit, Delete, Person, Email, Phone, LocationOn } from '@mui/icons-material';
+import { Add, Edit, Delete, Email, Phone, LocationOn } from '@mui/icons-material';
 
 const Clientes = () => {
     const [clientes, setClientes] = useState([]);

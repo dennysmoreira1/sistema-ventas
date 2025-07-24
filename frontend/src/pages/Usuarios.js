@@ -5,7 +5,7 @@ import {
     DialogContent, DialogActions, TextField, FormControl, InputLabel,
     Select, MenuItem, Alert, Snackbar
 } from '@mui/material';
-import { Add, Edit, Delete, Person, Email, Security } from '@mui/icons-material';
+import { Add, Edit, Delete, Person, Email } from '@mui/icons-material';
 
 const Usuarios = () => {
     const [usuarios, setUsuarios] = useState([]);

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
     Box, Typography, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Chip, IconButton, Button, Dialog, DialogTitle,
-    DialogContent, DialogActions, TextField, FormControl, InputLabel,
+    TableHead, TableRow, Paper, Chip, Button, TextField, FormControl, InputLabel,
     Select, MenuItem, Alert, Snackbar
 } from '@mui/material';
-import { Search, Print } from '@mui/icons-material';
+import { Print } from '@mui/icons-material';
 
 const ReporteVentas = () => {
     const [ventas, setVentas] = useState([]);
