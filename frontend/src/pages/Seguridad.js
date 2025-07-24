@@ -1,52 +1,17 @@
 import React, { useState } from 'react';
 import {
-    Box, Typography, Paper, Grid, Card, CardContent, Switch, FormControlLabel,
-    Button, TextField, Alert, Snackbar, Dialog, DialogTitle, DialogContent,
-    DialogActions
+    Box, Typography, Paper, Grid, Card, CardContent, Button, Alert, Snackbar
 } from '@mui/material';
 import {
-    Security, Lock, Visibility, VisibilityOff, Save, Cancel,
-    Notifications, VpnKey, Shield
+    Security, Lock
 } from '@mui/icons-material';
 
 const Seguridad = () => {
-    const [configuraciones, setConfiguraciones] = useState({
-        autenticacionDosFactores: false,
-        sesionesMultiples: true,
-        tiempoSesion: 24,
-        complejidadPassword: 'alta',
-        bloqueoIntentos: 3,
-        notificacionesSeguridad: true,
-        auditoria: true,
-        backupAutomatico: true
-    });
-
     const [mensaje, setMensaje] = useState('');
 
-    const handleConfigChange = (key, value) => {
-        setConfiguraciones(prev => ({
-            ...prev,
-            [key]: value
-        }));
+    const handleSave = () => {
+        setMensaje('Configuración de seguridad guardada exitosamente');
     };
-
-    const handleSaveConfig = () => {
-        setMensaje('Configuración de seguridad actualizada');
-        setTimeout(() => setMensaje(''), 3000);
-    };
-
-    const getNivelSeguridad = () => {
-        const configs = Object.values(configuraciones);
-        const activas = configs.filter(Boolean).length;
-        const total = configs.length;
-        const porcentaje = (activas / total) * 100;
-
-        if (porcentaje >= 80) return { nivel: 'Alto', color: 'success' };
-        if (porcentaje >= 60) return { nivel: 'Medio', color: 'warning' };
-        return { nivel: 'Bajo', color: 'error' };
-    };
-
-    const nivelSeguridad = getNivelSeguridad();
 
     return (
         <Box sx={{ p: 3 }}>
@@ -144,7 +109,7 @@ const Seguridad = () => {
             <Box display="flex" justifyContent="flex-end" mt={3}>
                 <Button
                     variant="contained"
-                    onClick={handleSaveConfig}
+                    onClick={handleSave}
                     startIcon={<Security />}
                 >
                     Guardar Configuración

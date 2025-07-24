@@ -5,7 +5,7 @@ import {
     DialogContent, DialogActions, TextField, FormControl, InputLabel,
     Select, MenuItem, Alert, Snackbar, Grid
 } from '@mui/material';
-import { Add, Edit, Delete, Print } from '@mui/icons-material';
+import { Add, Edit, Delete } from '@mui/icons-material';
 
 const ControlVentas = () => {
     const [ventas, setVentas] = useState([]);

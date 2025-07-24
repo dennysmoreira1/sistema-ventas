@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import {
-    Box, Typography, Switch, FormControlLabel, Button, Dialog, DialogTitle,
-    DialogContent, DialogActions, TextField, Grid, Alert, Snackbar
+    Box, Typography, Switch, FormControlLabel, Button, Grid, Alert, Snackbar
 } from '@mui/material';
 import {
-    Settings, Notifications, Brightness4, Brightness7,
-    VolumeUp, VolumeOff, Wifi, WifiOff
+    Settings, Notifications, Brightness4, VolumeUp, Wifi
 } from '@mui/icons-material';
 
 const Configuracion = () => {

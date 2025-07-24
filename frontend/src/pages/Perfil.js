@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import {
     Box, Typography, Paper, Grid, Card, CardContent, Button,
-    TextField, Avatar, Chip, Alert, Snackbar, Dialog, DialogTitle,
-    DialogContent, DialogActions
+    TextField, Avatar, Chip, Alert, Snackbar
 } from '@mui/material';
 import {
     Edit, Save, Cancel, Email, Phone, LocationOn,
@@ -32,21 +31,7 @@ const Perfil = () => {
     };
 
     const handleSaveProfile = () => {
-        // Aquí iría la lógica para guardar los cambios del perfil
         setMensaje('Perfil actualizado correctamente');
-        setEditing(false);
-    };
-
-    const handleCancelEdit = () => {
-        setFormData({
-            nombre: user?.nombre || '',
-            email: user?.email || '',
-            telefono: user?.telefono || '',
-            direccion: user?.direccion || '',
-            empresa: user?.empresa || '',
-            cargo: user?.cargo || '',
-            educacion: user?.educacion || ''
-        });
         setEditing(false);
     };
 

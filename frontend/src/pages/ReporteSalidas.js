@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Box, Typography, Paper, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Chip, IconButton, Button, Dialog, DialogTitle,
-    DialogContent, DialogActions, TextField, FormControl, InputLabel,
+    TableHead, TableRow, Chip, IconButton, Button, TextField, FormControl, InputLabel,
     Select, MenuItem, Alert, Snackbar, Grid, Card, CardContent
 } from '@mui/material';
-import { Search, Print, FilterList, Receipt, AttachMoney, TrendingUp, Category } from '@mui/icons-material';
+import { Search, Print, Receipt, AttachMoney, TrendingUp, Category } from '@mui/icons-material';
 
 const ReporteSalidas = () => {
-    const [salidas, setSalidas] = useState([]);
     const [filtro, setFiltro] = useState({
         tipo: '',
         estado: '',

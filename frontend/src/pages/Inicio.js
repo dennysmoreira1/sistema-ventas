@@ -1,204 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Box, Typography, Paper, Card, CardContent, Grid,
-    List, ListItem, ListItemIcon, ListItemText, Chip,
-    Avatar, LinearProgress, Button
+    Box, Typography, Grid, Card, CardContent,
+    Button, Chip, Alert, Snackbar
 } from '@mui/material';
 import {
-    TrendingUp, ShoppingCart, People, Inventory, AttachMoney,
-    Receipt, Assessment, Security, Notifications, CheckCircle,
-    Warning, Error, Info, Dashboard, Star
+    ShoppingCart, Inventory, People,
+    AttachMoney, Assessment
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 
 const Inicio = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [estadisticas] = useState({
+    const [mensaje, setMensaje] = useState('');
+
+    const estadisticas = {
         ventas: {
-            total: 125,
-            monto: 2850000,
-            crecimiento: 12.5,
-            completadas: 118,
-            pendientes: 7
-        },
-        clientes: {
-            total: 342,
-            nuevos: 28,
-            activos: 315,
-            inactivos: 27
+            total: 125000,
+            porcentaje: 15,
+            color: 'success'
         },
         productos: {
-            total: 156,
-            enStock: 142,
-            bajoStock: 14,
-            sinStock: 0
+            total: 450,
+            porcentaje: 8,
+            color: 'info'
         },
-        finanzas: {
-            ingresos: 2850000,
-            gastos: 1250000,
-            utilidad: 1600000,
-            crecimiento: 8.3
+        clientes: {
+            total: 89,
+            porcentaje: 12,
+            color: 'warning'
+        },
+        ingresos: {
+            total: 89000,
+            porcentaje: 22,
+            color: 'primary'
         }
-    });
+    };
 
-    const [actividadReciente] = useState([
+    const actividadesRecientes = [
         {
             id: 1,
             tipo: 'venta',
-            descripcion: 'Venta completada - Cliente: María González',
-            monto: 45000,
-            fecha: '2024-01-15 14:30',
-            estado: 'completada'
+            descripcion: 'Nueva venta registrada',
+            monto: 2500,
+            hora: '10:30 AM'
         },
         {
             id: 2,
-            tipo: 'cliente',
-            descripcion: 'Nuevo cliente registrado - Juan Pérez',
+            tipo: 'producto',
+            descripcion: 'Producto agregado al inventario',
             monto: null,
-            fecha: '2024-01-15 13:45',
-            estado: 'nuevo'
+            hora: '09:15 AM'
         },
         {
             id: 3,
-            tipo: 'producto',
-            descripcion: 'Stock bajo - Producto: Laptop HP',
+            tipo: 'cliente',
+            descripcion: 'Nuevo cliente registrado',
             monto: null,
-            fecha: '2024-01-15 12:20',
-            estado: 'advertencia'
-        },
-        {
-            id: 4,
-            tipo: 'venta',
-            descripcion: 'Venta pendiente - Cliente: Carlos López',
-            monto: 32000,
-            fecha: '2024-01-15 11:15',
-            estado: 'pendiente'
-        },
-        {
-            id: 5,
-            tipo: 'finanza',
-            descripcion: 'Gasto registrado - Material de oficina',
-            monto: -8500,
-            fecha: '2024-01-15 10:30',
-            estado: 'gasto'
+            hora: '08:45 AM'
         }
-    ]);
+    ];
 
-    const getEstadoColor = (estado) => {
-        switch (estado) {
-            case 'completada': return 'success';
-            case 'pendiente': return 'warning';
-            case 'nuevo': return 'info';
-            case 'advertencia': return 'warning';
-            case 'gasto': return 'error';
-            default: return 'default';
-        }
-    };
-
-    const getEstadoIcon = (estado) => {
-        switch (estado) {
-            case 'completada': return <CheckCircle />;
-            case 'pendiente': return <Warning />;
-            case 'nuevo': return <Info />;
-            case 'advertencia': return <Warning />;
-            case 'gasto': return <Receipt />;
-            default: return <Info />;
-        }
-    };
-
-    // Funciones para las acciones rápidas
-    const handleNuevaVenta = () => {
-        navigate('/registro-ventas');
-    };
-
-    const handleAgregarCliente = () => {
-        navigate('/clientes');
-    };
-
-    const handleRegistrarProducto = () => {
-        navigate('/productos');
-    };
-
-    const handleVerReportes = () => {
-        navigate('/reporte-ventas');
-    };
-
-    const handleVerGastos = () => {
-        navigate('/salidas-gastos');
-    };
-
-    const handleVerControlVentas = () => {
-        navigate('/control-ventas');
+    const handleCardClick = (ruta) => {
+        navigate(ruta);
     };
 
     return (
         <Box sx={{ p: 3 }}>
-            {/* Header con bienvenida */}
-            <Paper elevation={2} sx={{ p: 3, mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                    <Box>
-                        <Typography variant="h4" fontWeight="bold" gutterBottom>
-                            ¡Bienvenido, {user?.nombre || 'Usuario'}!
-                        </Typography>
-                        <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                            Panel de control del sistema de gestión de ventas
-                        </Typography>
-                    </Box>
-                    <Avatar sx={{ width: 60, height: 60, bgcolor: 'rgba(255,255,255,0.2)' }}>
-                        <Dashboard />
-                    </Avatar>
-                </Box>
-            </Paper>
+            <Typography variant="h4" fontWeight="bold" gutterBottom>
+                Bienvenido, {user?.nombre || 'Usuario'}
+            </Typography>
 
-            {/* Estadísticas principales */}
-            <Grid container spacing={3} sx={{ mb: 3 }}>
+            <Grid container spacing={3} sx={{ mb: 4 }}>
                 <Grid xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
-                                <ShoppingCart sx={{ mr: 2, color: 'primary.main' }} />
+                                <ShoppingCart sx={{ mr: 2, color: 'success.main' }} />
                                 <Box>
                                     <Typography variant="h6" fontWeight="bold">
-                                        {estadisticas.ventas.total}
+                                        Ventas del Mes
+                                    </Typography>
+                                    <Typography variant="h4" color="success.main">
+                                        ${estadisticas.ventas.total.toLocaleString()}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        Ventas Totales
+                                        +{estadisticas.ventas.porcentaje}% vs mes anterior
                                     </Typography>
                                 </Box>
-                            </Box>
-                            <LinearProgress
-                                variant="determinate"
-                                value={(estadisticas.ventas.completadas / estadisticas.ventas.total) * 100}
-                                sx={{ mt: 1 }}
-                            />
-                            <Typography variant="caption" color="textSecondary">
-                                {estadisticas.ventas.completadas} completadas
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                <Grid xs={12} sm={6} md={3}>
-                    <Card>
-                        <CardContent>
-                            <Box display="flex" alignItems="center">
-                                <AttachMoney sx={{ mr: 2, color: 'success.main' }} />
-                                <Box>
-                                    <Typography variant="h6" fontWeight="bold">
-                                        ${(estadisticas.finanzas.ingresos / 1000000).toFixed(1)}M
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Ingresos Totales
-                                    </Typography>
-                                </Box>
-                            </Box>
-                            <Box display="flex" alignItems="center" mt={1}>
-                                <TrendingUp sx={{ fontSize: 16, color: 'success.main', mr: 0.5 }} />
-                                <Typography variant="caption" color="success.main">
-                                    +{estadisticas.finanzas.crecimiento}%
-                                </Typography>
                             </Box>
                         </CardContent>
                     </Card>
@@ -208,202 +98,161 @@ const Inicio = () => {
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
-                                <People sx={{ mr: 2, color: 'info.main' }} />
+                                <Inventory sx={{ mr: 2, color: 'info.main' }} />
                                 <Box>
                                     <Typography variant="h6" fontWeight="bold">
-                                        {estadisticas.clientes.total}
+                                        Productos
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Clientes Registrados
-                                    </Typography>
-                                </Box>
-                            </Box>
-                            <Typography variant="caption" color="textSecondary">
-                                {estadisticas.clientes.nuevos} nuevos este mes
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                <Grid xs={12} sm={6} md={3}>
-                    <Card>
-                        <CardContent>
-                            <Box display="flex" alignItems="center">
-                                <Inventory sx={{ mr: 2, color: 'warning.main' }} />
-                                <Box>
-                                    <Typography variant="h6" fontWeight="bold">
+                                    <Typography variant="h4" color="info.main">
                                         {estadisticas.productos.total}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        Productos en Catálogo
+                                        +{estadisticas.productos.porcentaje}% vs mes anterior
                                     </Typography>
                                 </Box>
                             </Box>
-                            <Typography variant="caption" color="textSecondary">
-                                {estadisticas.productos.bajoStock} con stock bajo
-                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+
+                <Grid xs={12} sm={6} md={3}>
+                    <Card>
+                        <CardContent>
+                            <Box display="flex" alignItems="center">
+                                <People sx={{ mr: 2, color: 'warning.main' }} />
+                                <Box>
+                                    <Typography variant="h6" fontWeight="bold">
+                                        Clientes
+                                    </Typography>
+                                    <Typography variant="h4" color="warning.main">
+                                        {estadisticas.clientes.total}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        +{estadisticas.clientes.porcentaje}% vs mes anterior
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Grid>
+
+                <Grid xs={12} sm={6} md={3}>
+                    <Card>
+                        <CardContent>
+                            <Box display="flex" alignItems="center">
+                                <AttachMoney sx={{ mr: 2, color: 'primary.main' }} />
+                                <Box>
+                                    <Typography variant="h6" fontWeight="bold">
+                                        Ingresos
+                                    </Typography>
+                                    <Typography variant="h4" color="primary.main">
+                                        ${estadisticas.ingresos.total.toLocaleString()}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        +{estadisticas.ingresos.porcentaje}% vs mes anterior
+                                    </Typography>
+                                </Box>
+                            </Box>
                         </CardContent>
                     </Card>
                 </Grid>
             </Grid>
 
             <Grid container spacing={3}>
-                {/* Actividad Reciente */}
                 <Grid xs={12} md={8}>
                     <Card>
                         <CardContent>
-                            <Box display="flex" alignItems="center" mb={2}>
-                                <Notifications sx={{ mr: 1, color: 'primary.main' }} />
-                                <Typography variant="h6" fontWeight="bold">
-                                    Actividad Reciente
-                                </Typography>
-                            </Box>
-                            <List>
-                                {actividadReciente.map((actividad) => (
-                                    <ListItem key={actividad.id} divider>
-                                        <ListItemIcon>
-                                            {getEstadoIcon(actividad.estado)}
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={actividad.descripcion}
-                                            secondary={actividad.fecha}
-                                        />
-                                        <Box display="flex" alignItems="center" gap={1}>
-                                            {actividad.monto && (
-                                                <Typography variant="body2" fontWeight="bold">
-                                                    ${actividad.monto.toLocaleString()}
-                                                </Typography>
-                                            )}
+                            <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                Actividad Reciente
+                            </Typography>
+                            <Box>
+                                {actividadesRecientes.map((actividad) => (
+                                    <Box
+                                        key={actividad.id}
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            py: 1,
+                                            borderBottom: '1px solid #f0f0f0'
+                                        }}
+                                    >
+                                        <Box>
+                                            <Typography variant="body1">
+                                                {actividad.descripcion}
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                {actividad.hora}
+                                            </Typography>
+                                        </Box>
+                                        {actividad.monto && (
                                             <Chip
-                                                label={actividad.estado}
-                                                color={getEstadoColor(actividad.estado)}
+                                                label={`$${actividad.monto}`}
+                                                color="success"
                                                 size="small"
                                             />
-                                        </Box>
-                                    </ListItem>
+                                        )}
+                                    </Box>
                                 ))}
-                            </List>
+                            </Box>
                         </CardContent>
                     </Card>
                 </Grid>
 
-                {/* Resumen Rápido */}
                 <Grid xs={12} md={4}>
                     <Card>
-                        <CardContent>
-                            <Box display="flex" alignItems="center" mb={2}>
-                                <Star sx={{ mr: 1, color: 'warning.main' }} />
-                                <Typography variant="h6" fontWeight="bold">
-                                    Resumen Rápido
-                                </Typography>
-                            </Box>
-                            <List dense>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <CheckCircle color="success" />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Ventas del día"
-                                        secondary={`${estadisticas.ventas.total} ventas`}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <People color="info" />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Clientes activos"
-                                        secondary={`${estadisticas.clientes.activos} clientes`}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <Inventory color="warning" />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Productos en stock"
-                                        secondary={`${estadisticas.productos.enStock} productos`}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <AttachMoney color="success" />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Utilidad mensual"
-                                        secondary={`$${(estadisticas.finanzas.utilidad / 1000000).toFixed(1)}M`}
-                                    />
-                                </ListItem>
-                            </List>
-                        </CardContent>
-                    </Card>
-
-                    {/* Acciones Rápidas */}
-                    <Card sx={{ mt: 2 }}>
                         <CardContent>
                             <Typography variant="h6" fontWeight="bold" gutterBottom>
                                 Acciones Rápidas
                             </Typography>
-                            <Box display="flex" flexDirection="column" gap={1}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                 <Button
-                                    variant="outlined"
-                                    size="small"
+                                    variant="contained"
                                     startIcon={<ShoppingCart />}
+                                    onClick={() => handleCardClick('/ventas')}
                                     fullWidth
-                                    onClick={handleNuevaVenta}
                                 >
                                     Nueva Venta
                                 </Button>
                                 <Button
                                     variant="outlined"
-                                    size="small"
-                                    startIcon={<People />}
-                                    fullWidth
-                                    onClick={handleAgregarCliente}
-                                >
-                                    Agregar Cliente
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    size="small"
                                     startIcon={<Inventory />}
+                                    onClick={() => handleCardClick('/productos')}
                                     fullWidth
-                                    onClick={handleRegistrarProducto}
                                 >
-                                    Registrar Producto
+                                    Gestionar Productos
                                 </Button>
                                 <Button
                                     variant="outlined"
-                                    size="small"
-                                    startIcon={<Assessment />}
+                                    startIcon={<People />}
+                                    onClick={() => handleCardClick('/clientes')}
                                     fullWidth
-                                    onClick={handleVerReportes}
+                                >
+                                    Ver Clientes
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<Assessment />}
+                                    onClick={() => handleCardClick('/reportes')}
+                                    fullWidth
                                 >
                                     Ver Reportes
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    size="small"
-                                    startIcon={<Receipt />}
-                                    fullWidth
-                                    onClick={handleVerGastos}
-                                >
-                                    Gestionar Gastos
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    size="small"
-                                    startIcon={<TrendingUp />}
-                                    fullWidth
-                                    onClick={handleVerControlVentas}
-                                >
-                                    Control de Ventas
                                 </Button>
                             </Box>
                         </CardContent>
                     </Card>
                 </Grid>
             </Grid>
+
+            <Snackbar
+                open={!!mensaje}
+                autoHideDuration={6000}
+                onClose={() => setMensaje('')}
+            >
+                <Alert onClose={() => setMensaje('')} severity="success">
+                    {mensaje}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

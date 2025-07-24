@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Box, Typography, Paper, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Chip, IconButton, Button, Dialog, DialogTitle,
     DialogContent, DialogActions, TextField, FormControl, InputLabel,
     Select, MenuItem, Alert, Snackbar, Grid
 } from '@mui/material';
-import { Add, Edit, Delete, ShoppingCart, AttachMoney } from '@mui/icons-material';
+import { Add, Edit, Delete } from '@mui/icons-material';
 
 const GestionVentas = () => {
     const [ventas, setVentas] = useState([]);
