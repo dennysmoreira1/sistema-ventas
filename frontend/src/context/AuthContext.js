@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, [API_URL]);
+    }, []);
 
     const logout = useCallback(() => {
         clearSession();
