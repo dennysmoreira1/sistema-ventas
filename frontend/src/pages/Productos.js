@@ -380,109 +380,97 @@ const Productos = () => {
                 </DialogTitle>
                 <DialogContent>
                     <Box sx={{ pt: 2 }}>
-                        <Grid container spacing={2}>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Código"
-                                    name="codigo"
-                                    value={formData.codigo}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                    required
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Nombre"
-                                    name="nombre"
-                                    value={formData.nombre}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                    required
-                                />
-                            </Grid>
-                            <Grid xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Descripción"
-                                    name="descripcion"
-                                    value={formData.descripcion}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                    multiline
-                                    rows={3}
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Precio"
-                                    name="precio"
-                                    type="number"
-                                    value={formData.precio}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                    required
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Stock"
-                                    name="stock"
-                                    type="number"
-                                    value={formData.stock}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={4}>
-                                <TextField
-                                    fullWidth
-                                    label="Categoría"
-                                    name="categoria"
-                                    value={formData.categoria}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={4}>
-                                <TextField
-                                    fullWidth
-                                    label="Marca"
-                                    name="marca"
-                                    value={formData.marca}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={4}>
-                                <TextField
-                                    fullWidth
-                                    label="Proveedor"
-                                    name="proveedor"
-                                    value={formData.proveedor}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <FormControl fullWidth margin="normal">
-                                    <InputLabel>Estado</InputLabel>
-                                    <Select
-                                        name="estado"
-                                        value={formData.estado}
-                                        onChange={handleInputChange}
-                                        label="Estado"
-                                    >
-                                        <MenuItem value="activo">Activo</MenuItem>
-                                        <MenuItem value="inactivo">Inactivo</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                        </Grid>
+                        <TextField
+                            fullWidth
+                            label="Código"
+                            name="codigo"
+                            value={formData.codigo}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Nombre"
+                            name="nombre"
+                            value={formData.nombre}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Descripción"
+                            name="descripcion"
+                            value={formData.descripcion}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            multiline
+                            rows={3}
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Precio"
+                            name="precio"
+                            type="number"
+                            value={formData.precio}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Stock"
+                            name="stock"
+                            type="number"
+                            value={formData.stock}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Categoría"
+                            name="categoria"
+                            value={formData.categoria}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Marca"
+                            name="marca"
+                            value={formData.marca}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Proveedor"
+                            name="proveedor"
+                            value={formData.proveedor}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            sx={{ mb: 2 }}
+                        />
+                        <FormControl fullWidth margin="normal" sx={{ mb: 2 }}>
+                            <InputLabel>Estado</InputLabel>
+                            <Select
+                                name="estado"
+                                value={formData.estado}
+                                onChange={handleInputChange}
+                                label="Estado"
+                            >
+                                <MenuItem value="activo">Activo</MenuItem>
+                                <MenuItem value="inactivo">Inactivo</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions>

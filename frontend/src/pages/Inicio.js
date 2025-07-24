@@ -159,7 +159,7 @@ const Inicio = () => {
             </Grid>
 
             <Grid container spacing={3}>
-                <Grid xs={12} md={8}>
+                <Grid xs={12} md={6}>
                     <Card>
                         <CardContent>
                             <Typography variant="h6" fontWeight="bold" gutterBottom>
@@ -199,7 +199,7 @@ const Inicio = () => {
                     </Card>
                 </Grid>
 
-                <Grid xs={12} md={4}>
+                <Grid xs={12} md={6}>
                     <Card>
                         <CardContent>
                             <Typography variant="h6" fontWeight="bold" gutterBottom>

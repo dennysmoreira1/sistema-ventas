@@ -5,6 +5,7 @@ import './App.css';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar';
+import Header from './components/Header';
 import Login from './pages/Login';
 import GestionVentas from './pages/GestionVentas';
 import Inicio from './pages/Inicio';
@@ -19,11 +20,10 @@ import ControlVentas from './pages/ControlVentas';
 import ReporteVentas from './pages/ReporteVentas';
 import SalidasGastos from './pages/SalidasGastos';
 import ReporteSalidas from './pages/ReporteSalidas';
-import Seguridad from './pages/Seguridad';
 import Perfil from './pages/Perfil';
 import Configuracion from './pages/Configuracion';
 
-// Componente para el layout principal con sidebar
+// Componente para el layout principal con sidebar y header
 const MainLayout = ({ children }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -38,10 +38,15 @@ const MainLayout = ({ children }) => {
           backgroundColor: '#f5f5f5',
           minHeight: '100vh',
           width: { xs: '100%', md: `calc(100% - ${isMobile ? 240 : 280}px)` },
-          overflow: 'auto'
+          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
-        {children}
+        <Header />
+        <Box sx={{ flex: 1, overflow: 'auto' }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );
@@ -151,7 +156,7 @@ const AppContent = () => {
       } />
 
       <Route path="/salidas-gastos" element={
-        <ProtectedRoute requiredPermissions={['configuracion']}>
+        <ProtectedRoute requiredPermissions={['admin']}>
           <MainLayout>
             <SalidasGastos />
           </MainLayout>
@@ -166,16 +171,8 @@ const AppContent = () => {
         </ProtectedRoute>
       } />
 
-      <Route path="/seguridad" element={
-        <ProtectedRoute requiredPermissions={['configuracion']}>
-          <MainLayout>
-            <Seguridad />
-          </MainLayout>
-        </ProtectedRoute>
-      } />
-
       <Route path="/perfil" element={
-        <ProtectedRoute>
+        <ProtectedRoute requiredPermissions={['admin']}>
           <MainLayout>
             <Perfil />
           </MainLayout>
@@ -183,7 +180,7 @@ const AppContent = () => {
       } />
 
       <Route path="/configuracion" element={
-        <ProtectedRoute requiredPermissions={['configuracion']}>
+        <ProtectedRoute requiredPermissions={['admin']}>
           <MainLayout>
             <Configuracion />
           </MainLayout>

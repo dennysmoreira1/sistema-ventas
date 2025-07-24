@@ -1,44 +1,21 @@
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
     Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-    Typography, Divider, Avatar, Chip, IconButton, Menu, MenuItem,
-    useTheme, useMediaQuery
+    Typography, Divider, useTheme, useMediaQuery
 } from '@mui/material';
 import {
-    Dashboard, People, Inventory, ShoppingCart, Assessment, Security,
-    AccountCircle, Logout, Settings, Category, Label, LocalShipping,
-    TrendingUp, Receipt, Person
+    Dashboard, People, Inventory, ShoppingCart, Assessment,
+    Category, Label, LocalShipping, TrendingUp, Receipt
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = () => {
     const { pathname } = useLocation();
-    const navigate = useNavigate();
-    const { user, logout, hasPermission } = useAuth();
-    const [anchorEl, setAnchorEl] = useState(null);
+    const { hasPermission } = useAuth();
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
-    const handleMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-        handleMenuClose();
-    };
-
-    const handleNavigate = (path) => {
-        navigate(path);
-        handleMenuClose();
-    };
 
     const isActive = (path) => pathname === path;
 
@@ -77,16 +54,17 @@ const Sidebar = () => {
         {
             title: 'FINANZAS',
             items: [
-                { text: 'Salidas / Gastos', path: '/salidas-gastos', icon: <Receipt />, permission: 'configuracion' },
+                { text: 'Salidas / Gastos', path: '/salidas-gastos', icon: <Receipt />, permission: 'admin' },
                 { text: 'Reporte de Salidas', path: '/reporte-salidas', icon: <TrendingUp />, permission: 'reportes' }
             ]
         },
         {
-            title: 'SEGURIDAD',
+            title: 'CONFIGURACIÓN',
             items: [
-                { text: 'Seguridad', path: '/seguridad', icon: <Security />, permission: 'configuracion' }
+                { text: 'Configuración', path: '/configuracion', icon: <Settings />, permission: 'admin' }
             ]
-        }
+        },
+
     ];
 
     const drawerWidth = isMobile ? 240 : 280;
@@ -115,81 +93,6 @@ const Sidebar = () => {
                 >
                     Mi Panel
                 </Typography>
-
-                {/* Información del usuario */}
-                {user && (
-                    <Box sx={{
-                        mt: 2,
-                        p: { xs: 1, md: 2 },
-                        bgcolor: 'rgba(255,255,255,0.1)',
-                        borderRadius: 1,
-                        border: '1px solid rgba(255,255,255,0.2)'
-                    }}>
-                        <Box display="flex" alignItems="center" mb={1}>
-                            <Avatar sx={{ mr: 1, bgcolor: 'primary.main', width: { xs: 32, md: 40 }, height: { xs: 32, md: 40 } }}>
-                                <AccountCircle />
-                            </Avatar>
-                            <Box sx={{ minWidth: 0, flex: 1 }}>
-                                <Typography
-                                    variant="subtitle2"
-                                    fontWeight="bold"
-                                    noWrap
-                                    sx={{ fontSize: { xs: '0.8rem', md: '0.9rem' } }}
-                                >
-                                    {user.nombre || 'Usuario'}
-                                </Typography>
-                                <Chip
-                                    label={user.rol || 'Usuario'}
-                                    size="small"
-                                    sx={{
-                                        fontSize: { xs: '0.6rem', md: '0.7rem' },
-                                        height: { xs: 16, md: 20 },
-                                        bgcolor: 'primary.main',
-                                        color: 'white'
-                                    }}
-                                />
-                            </Box>
-                        </Box>
-
-                        {/* Botón de menú de usuario */}
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <IconButton
-                                size="small"
-                                onClick={handleMenuOpen}
-                                sx={{ color: 'white' }}
-                            >
-                                <Settings fontSize="small" />
-                            </IconButton>
-                            <Menu
-                                anchorEl={anchorEl}
-                                open={Boolean(anchorEl)}
-                                onClose={handleMenuClose}
-                                PaperProps={{
-                                    sx: {
-                                        mt: 1,
-                                        minWidth: 150,
-                                        bgcolor: 'white',
-                                        '& .MuiMenuItem-root': {
-                                            fontSize: '0.875rem'
-                                        }
-                                    }
-                                }}
-                            >
-                                <MenuItem onClick={() => handleNavigate('/perfil')}>
-                                    <Person sx={{ mr: 1, fontSize: '1.2rem' }} />
-                                    Perfil
-                                </MenuItem>
-                                <Divider />
-                                <MenuItem onClick={handleLogout}>
-                                    <Logout sx={{ mr: 1, fontSize: '1.2rem' }} />
-                                    Cerrar Sesión
-                                </MenuItem>
-                            </Menu>
-                        </Box>
-                    </Box>
-                )}
-
-                <Divider sx={{ my: 2, bgcolor: 'rgba(255,255,255,0.2)' }} />
 
                 {/* Navegación */}
                 <List sx={{ pt: 0 }}>

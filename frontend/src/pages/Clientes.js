@@ -211,18 +211,24 @@ const Clientes = () => {
                         </Box>
 
                         <Box sx={{ mb: 2 }}>
-                            <Box display="flex" alignItems="center" mb={1}>
-                                <Email sx={{ mr: 1, fontSize: '1rem', color: 'text.secondary' }} />
-                                <Typography variant="body2">{cliente.email}</Typography>
-                            </Box>
-                            <Box display="flex" alignItems="center" mb={1}>
-                                <Phone sx={{ mr: 1, fontSize: '1rem', color: 'text.secondary' }} />
-                                <Typography variant="body2">{cliente.telefono}</Typography>
-                            </Box>
-                            <Box display="flex" alignItems="center">
-                                <LocationOn sx={{ mr: 1, fontSize: '1rem', color: 'text.secondary' }} />
-                                <Typography variant="body2" noWrap>{cliente.direccion}</Typography>
-                            </Box>
+                            {cliente.email && (
+                                <Box display="flex" alignItems="center" mb={1}>
+                                    <Email sx={{ mr: 1, fontSize: '1rem', color: 'text.secondary' }} />
+                                    <Typography variant="body2">{cliente.email}</Typography>
+                                </Box>
+                            )}
+                            {cliente.telefono && (
+                                <Box display="flex" alignItems="center" mb={1}>
+                                    <Phone sx={{ mr: 1, fontSize: '1rem', color: 'text.secondary' }} />
+                                    <Typography variant="body2">{cliente.telefono}</Typography>
+                                </Box>
+                            )}
+                            {cliente.direccion && (
+                                <Box display="flex" alignItems="center">
+                                    <LocationOn sx={{ mr: 1, fontSize: '1rem', color: 'text.secondary' }} />
+                                    <Typography variant="body2" noWrap>{cliente.direccion}</Typography>
+                                </Box>
+                            )}
                         </Box>
 
                         <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -348,92 +354,81 @@ const Clientes = () => {
                 </DialogTitle>
                 <DialogContent>
                     <Box sx={{ pt: 2 }}>
-                        <Grid container spacing={2}>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Nombre completo"
-                                    name="nombre"
-                                    value={formData.nombre}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                    required
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Documento"
-                                    name="documento"
-                                    value={formData.documento}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                    required
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Email"
-                                    name="email"
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                    required
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Teléfono"
-                                    name="telefono"
-                                    value={formData.telefono}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                />
-                            </Grid>
-                            <Grid xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Dirección"
-                                    name="direccion"
-                                    value={formData.direccion}
-                                    onChange={handleInputChange}
-                                    margin="normal"
-                                    multiline
-                                    rows={2}
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <FormControl fullWidth margin="normal">
-                                    <InputLabel>Tipo de Cliente</InputLabel>
-                                    <Select
-                                        name="tipoCliente"
-                                        value={formData.tipoCliente}
-                                        onChange={handleInputChange}
-                                        label="Tipo de Cliente"
-                                    >
-                                        <MenuItem value="regular">Regular</MenuItem>
-                                        <MenuItem value="premium">Premium</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <FormControl fullWidth margin="normal">
-                                    <InputLabel>Estado</InputLabel>
-                                    <Select
-                                        name="estado"
-                                        value={formData.estado}
-                                        onChange={handleInputChange}
-                                        label="Estado"
-                                    >
-                                        <MenuItem value="activo">Activo</MenuItem>
-                                        <MenuItem value="inactivo">Inactivo</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                        </Grid>
+                        <TextField
+                            fullWidth
+                            label="Nombre completo"
+                            name="nombre"
+                            value={formData.nombre}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Documento"
+                            name="documento"
+                            value={formData.documento}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Teléfono"
+                            name="telefono"
+                            value={formData.telefono}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Dirección"
+                            name="direccion"
+                            value={formData.direccion}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            multiline
+                            rows={2}
+                            sx={{ mb: 2 }}
+                        />
+                        <FormControl fullWidth margin="normal" sx={{ mb: 2 }}>
+                            <InputLabel>Tipo de Cliente</InputLabel>
+                            <Select
+                                name="tipoCliente"
+                                value={formData.tipoCliente}
+                                onChange={handleInputChange}
+                                label="Tipo de Cliente"
+                            >
+                                <MenuItem value="regular">Regular</MenuItem>
+                                <MenuItem value="premium">Premium</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth margin="normal" sx={{ mb: 2 }}>
+                            <InputLabel>Estado</InputLabel>
+                            <Select
+                                name="estado"
+                                value={formData.estado}
+                                onChange={handleInputChange}
+                                label="Estado"
+                            >
+                                <MenuItem value="activo">Activo</MenuItem>
+                                <MenuItem value="inactivo">Inactivo</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions>
