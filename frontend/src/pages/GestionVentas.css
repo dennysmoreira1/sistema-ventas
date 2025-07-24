@@ -1,0 +1,168 @@
+.ventas-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.ventas-main {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 2rem;
+    flex: 2;
+    min-width: 500px;
+}
+
+.ventas-main h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.alert-info {
+    background: #fffbe6;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.ventas-form {
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.form-row>div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.ventas-form label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+.ventas-form input,
+.ventas-form select {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.btn-ver-productos {
+    background: #198754;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.carrito-section {
+    margin-top: 2rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1.2rem;
+}
+
+.carrito-section h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.carrito-vacio {
+    color: #888;
+    font-style: italic;
+}
+
+.carrito-totales {
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+.carrito-total-final {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+.carrito-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-registrar {
+    background: #198754;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-limpiar {
+    background: #0d6efd;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.ventas-comprobante {
+    flex: 1;
+    min-width: 320px;
+}
+
+.comprobante-box {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem 1.2rem;
+}
+
+.comprobante-box h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.comprobante-info>div {
+    margin-bottom: 0.5rem;
+    font-size: 0.98rem;
+}
+
+.comprobante-productos {
+    margin: 1rem 0;
+    font-size: 0.98rem;
+}
+
+.comprobante-totales {
+    border-top: 1px solid #eee;
+    padding-top: 0.7rem;
+    font-size: 1rem;
+}
+
+.comprobante-total {
+    font-weight: bold;
+    color: #198754;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}

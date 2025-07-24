@@ -1,0 +1,16 @@
+.sidebar span {
+    display: block;
+    font-size: 0.85rem;
+    color: #888;
+    margin: 1.2rem 0 0.5rem 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.sidebar ul li {
+    margin-bottom: 0.7rem;
+}
+
+.sidebar ul li:last-child {
+    margin-bottom: 0;
+}
