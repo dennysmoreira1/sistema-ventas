@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-    Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, IconButton,
-    Chip, Alert, Snackbar, FormControl, InputLabel, Select, MenuItem, Avatar
+    Box, Typography, Button, Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, Paper, Chip, IconButton, Dialog, DialogTitle,
+    DialogContent, DialogActions, TextField, FormControl, InputLabel,
+    Select, MenuItem, Alert, Snackbar
 } from '@mui/material';
-import { Add, Edit, Delete, Phone, Email, LocationOn } from '@mui/icons-material';
-
-const API_URL = 'http://localhost:4000/api';
+import { Add, Edit, Delete, Person, Email, Phone, LocationOn } from '@mui/icons-material';
 
 const Vendedores = () => {
     const [vendedores, setVendedores] = useState([]);
@@ -28,36 +27,36 @@ const Vendedores = () => {
         setVendedores([
             {
                 id: 1,
-                nombre: 'Carlos Rodríguez',
-                email: 'carlos@empresa.com',
-                telefono: '300-123-4567',
-                comision: 15,
+                nombre: 'María García',
+                email: 'maria.garcia@email.com',
+                telefono: '+57 300 123 4567',
+                comision: 5.5,
                 zona: 'Norte',
                 estado: 'activo',
-                ventasMes: 25,
-                totalVentas: 125000
+                ventasRealizadas: 25,
+                fechaRegistro: '2024-01-01'
             },
             {
                 id: 2,
-                nombre: 'Ana Martínez',
-                email: 'ana@empresa.com',
-                telefono: '300-987-6543',
-                comision: 12,
+                nombre: 'Ana Rodríguez',
+                email: 'ana.rodriguez@email.com',
+                telefono: '+57 300 987 6543',
+                comision: 4.8,
                 zona: 'Sur',
                 estado: 'activo',
-                ventasMes: 18,
-                totalVentas: 89000
+                ventasRealizadas: 18,
+                fechaRegistro: '2024-01-02'
             },
             {
                 id: 3,
-                nombre: 'Luis González',
-                email: 'luis@empresa.com',
-                telefono: '300-555-1234',
-                comision: 10,
+                nombre: 'Pedro Sánchez',
+                email: 'pedro.sanchez@email.com',
+                telefono: '+57 300 555 1234',
+                comision: 6.2,
                 zona: 'Este',
                 estado: 'inactivo',
-                ventasMes: 0,
-                totalVentas: 45000
+                ventasRealizadas: 0,
+                fechaRegistro: '2024-01-03'
             }
         ]);
     }, []);
@@ -108,8 +107,8 @@ const Vendedores = () => {
     };
 
     const handleSubmit = () => {
-        if (!formData.nombre || !formData.email || !formData.telefono) {
-            setError('Los campos nombre, email y teléfono son obligatorios');
+        if (!formData.nombre || !formData.email) {
+            setError('Los campos nombre y email son obligatorios');
             return;
         }
 
@@ -128,22 +127,22 @@ const Vendedores = () => {
                     }
                     : v
             ));
-            setMensaje('Vendedor actualizado correctamente');
+            setMensaje('Vendedor actualizado exitosamente');
         } else {
-            // Agregar nuevo vendedor
-            const newVendedor = {
+            // Crear nuevo vendedor
+            const nuevoVendedor = {
                 id: Date.now(),
                 nombre: formData.nombre,
                 email: formData.email,
                 telefono: formData.telefono,
-                comision: parseFloat(formData.comision),
+                comision: parseFloat(formData.comision) || 0,
                 zona: formData.zona,
                 estado: formData.estado,
-                ventasMes: 0,
-                totalVentas: 0
+                ventasRealizadas: 0,
+                fechaRegistro: new Date().toISOString().split('T')[0]
             };
-            setVendedores([...vendedores, newVendedor]);
-            setMensaje('Vendedor agregado correctamente');
+            setVendedores([...vendedores, nuevoVendedor]);
+            setMensaje('Vendedor creado exitosamente');
         }
 
         handleCloseDialog();
@@ -151,23 +150,34 @@ const Vendedores = () => {
 
     const handleDelete = (id) => {
         setVendedores(vendedores.filter(v => v.id !== id));
-        setMensaje('Vendedor eliminado correctamente');
+        setMensaje('Vendedor eliminado exitosamente');
     };
 
     const getEstadoColor = (estado) => {
-        return estado === 'activo' ? 'success' : 'default';
+        return estado === 'activo' ? 'success' : 'error';
     };
 
-    const getInitials = (nombre) => {
-        return nombre.split(' ').map(n => n[0]).join('').toUpperCase();
+    const getZonaColor = (zona) => {
+        switch (zona) {
+            case 'Norte':
+                return 'primary';
+            case 'Sur':
+                return 'secondary';
+            case 'Este':
+                return 'info';
+            case 'Oeste':
+                return 'warning';
+            default:
+                return 'default';
+        }
     };
 
     return (
-    <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3 }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                 <Typography variant="h4" fontWeight="bold">
-                Gestión de Vendedores
-            </Typography>
+                    Gestión de Vendedores
+                </Typography>
                 <Button
                     variant="contained"
                     startIcon={<Add />}
@@ -185,9 +195,8 @@ const Vendedores = () => {
                             <TableCell>Contacto</TableCell>
                             <TableCell>Zona</TableCell>
                             <TableCell>Comisión</TableCell>
-                            <TableCell>Ventas Mes</TableCell>
-                            <TableCell>Total Ventas</TableCell>
                             <TableCell>Estado</TableCell>
+                            <TableCell>Ventas Realizadas</TableCell>
                             <TableCell>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
@@ -196,37 +205,36 @@ const Vendedores = () => {
                             <TableRow key={vendedor.id}>
                                 <TableCell>
                                     <Box display="flex" alignItems="center">
-                                        <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
-                                            {getInitials(vendedor.nombre)}
-                                        </Avatar>
-                                        <Box>
-                                            <Typography variant="subtitle2" fontWeight="bold">
-                                                {vendedor.nombre}
-                                            </Typography>
-                                        </Box>
+                                        <Person sx={{ mr: 1, color: 'primary.main' }} />
+                                        <Typography variant="subtitle2" fontWeight="bold">
+                                            {vendedor.nombre}
+                                        </Typography>
                                     </Box>
                                 </TableCell>
                                 <TableCell>
                                     <Box>
                                         <Box display="flex" alignItems="center" mb={0.5}>
-                                            <Email fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="body2">{vendedor.email}</Typography>
+                                            <Email sx={{ mr: 0.5, fontSize: '0.875rem', color: 'text.secondary' }} />
+                                            <Typography variant="body2" noWrap sx={{ maxWidth: 150 }}>
+                                                {vendedor.email}
+                                            </Typography>
                                         </Box>
                                         <Box display="flex" alignItems="center">
-                                            <Phone fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="body2">{vendedor.telefono}</Typography>
+                                            <Phone sx={{ mr: 0.5, fontSize: '0.875rem', color: 'text.secondary' }} />
+                                            <Typography variant="body2">
+                                                {vendedor.telefono}
+                                            </Typography>
                                         </Box>
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    <Box display="flex" alignItems="center">
-                                        <LocationOn fontSize="small" sx={{ mr: 0.5, color: 'text.secondary' }} />
-                                        {vendedor.zona}
-                                    </Box>
+                                    <Chip
+                                        label={vendedor.zona}
+                                        color={getZonaColor(vendedor.zona)}
+                                        size="small"
+                                    />
                                 </TableCell>
                                 <TableCell>{vendedor.comision}%</TableCell>
-                                <TableCell>{vendedor.ventasMes}</TableCell>
-                                <TableCell>${vendedor.totalVentas.toLocaleString()}</TableCell>
                                 <TableCell>
                                     <Chip
                                         label={vendedor.estado}
@@ -234,6 +242,7 @@ const Vendedores = () => {
                                         size="small"
                                     />
                                 </TableCell>
+                                <TableCell>{vendedor.ventasRealizadas}</TableCell>
                                 <TableCell>
                                     <IconButton
                                         size="small"
@@ -257,80 +266,82 @@ const Vendedores = () => {
             </TableContainer>
 
             {/* Dialog para agregar/editar vendedor */}
-            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
                 <DialogTitle>
                     {editingVendedor ? 'Editar Vendedor' : 'Agregar Nuevo Vendedor'}
                 </DialogTitle>
                 <DialogContent>
                     <Box sx={{ pt: 2 }}>
-                        <TextField
-                            fullWidth
-                            label="Nombre completo"
-                            name="nombre"
-                            value={formData.nombre}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Email"
-                            name="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Teléfono"
-                            name="telefono"
-                            value={formData.telefono}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Zona</InputLabel>
-                            <Select
-                                name="zona"
-                                value={formData.zona}
+                        <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' } }}>
+                            <TextField
+                                fullWidth
+                                label="Nombre completo"
+                                name="nombre"
+                                value={formData.nombre}
                                 onChange={handleInputChange}
-                                label="Zona"
-                            >
-                                <MenuItem value="Norte">Norte</MenuItem>
-                                <MenuItem value="Sur">Sur</MenuItem>
-                                <MenuItem value="Este">Este</MenuItem>
-                                <MenuItem value="Oeste">Oeste</MenuItem>
-                                <MenuItem value="Centro">Centro</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            fullWidth
-                            label="Comisión (%)"
-                            name="comision"
-                            type="number"
-                            value={formData.comision}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            inputProps={{ min: 0, max: 100 }}
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Estado</InputLabel>
-                            <Select
-                                name="estado"
-                                value={formData.estado}
+                                margin="normal"
+                                required
+                            />
+                            <TextField
+                                fullWidth
+                                label="Email"
+                                name="email"
+                                type="email"
+                                value={formData.email}
                                 onChange={handleInputChange}
-                                label="Estado"
-                            >
-                                <MenuItem value="activo">Activo</MenuItem>
-                                <MenuItem value="inactivo">Inactivo</MenuItem>
-                            </Select>
-                        </FormControl>
+                                margin="normal"
+                                required
+                            />
+                            <TextField
+                                fullWidth
+                                label="Teléfono"
+                                name="telefono"
+                                value={formData.telefono}
+                                onChange={handleInputChange}
+                                margin="normal"
+                            />
+                            <TextField
+                                fullWidth
+                                label="Comisión (%)"
+                                name="comision"
+                                type="number"
+                                value={formData.comision}
+                                onChange={handleInputChange}
+                                margin="normal"
+                            />
+                            <FormControl fullWidth margin="normal">
+                                <InputLabel>Zona</InputLabel>
+                                <Select
+                                    name="zona"
+                                    value={formData.zona}
+                                    onChange={handleInputChange}
+                                    label="Zona"
+                                >
+                                    <MenuItem value="Norte">Norte</MenuItem>
+                                    <MenuItem value="Sur">Sur</MenuItem>
+                                    <MenuItem value="Este">Este</MenuItem>
+                                    <MenuItem value="Oeste">Oeste</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth margin="normal">
+                                <InputLabel>Estado</InputLabel>
+                                <Select
+                                    name="estado"
+                                    value={formData.estado}
+                                    onChange={handleInputChange}
+                                    label="Estado"
+                                >
+                                    <MenuItem value="activo">Activo</MenuItem>
+                                    <MenuItem value="inactivo">Inactivo</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog}>Cancelar</Button>
                     <Button onClick={handleSubmit} variant="contained">
-                        {editingVendedor ? 'Actualizar' : 'Agregar'}
+                        {editingVendedor ? 'Actualizar' : 'Crear'}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -338,1066 +349,25 @@ const Vendedores = () => {
             {/* Snackbar para mensajes */}
             <Snackbar
                 open={!!mensaje}
-                autoHideDuration={3000}
+                autoHideDuration={6000}
                 onClose={() => setMensaje('')}
             >
-                <Alert severity="success" onClose={() => setMensaje('')}>
+                <Alert onClose={() => setMensaje('')} severity="success">
                     {mensaje}
                 </Alert>
             </Snackbar>
 
             <Snackbar
                 open={!!error}
-                autoHideDuration={3000}
+                autoHideDuration={6000}
                 onClose={() => setError('')}
             >
-                <Alert severity="error" onClose={() => setError('')}>
+                <Alert onClose={() => setError('')} severity="error">
                     {error}
                 </Alert>
             </Snackbar>
-    </Box>
-);
-};
-
-export default Vendedores; 
-        nombre: '',
-        email: '',
-        telefono: '',
-        comision: '',
-        zona: '',
-        estado: 'activo'
-    });
-    const [mensaje, setMensaje] = useState('');
-    const [error, setError] = useState('');
-
-    // Datos de ejemplo
-    useEffect(() => {
-        setVendedores([
-            {
-                id: 1,
-                nombre: 'Carlos Rodríguez',
-                email: 'carlos@empresa.com',
-                telefono: '300-123-4567',
-                comision: 15,
-                zona: 'Norte',
-                estado: 'activo',
-                ventasMes: 25,
-                totalVentas: 125000
-            },
-            {
-                id: 2,
-                nombre: 'Ana Martínez',
-                email: 'ana@empresa.com',
-                telefono: '300-987-6543',
-                comision: 12,
-                zona: 'Sur',
-                estado: 'activo',
-                ventasMes: 18,
-                totalVentas: 89000
-            },
-            {
-                id: 3,
-                nombre: 'Luis González',
-                email: 'luis@empresa.com',
-                telefono: '300-555-1234',
-                comision: 10,
-                zona: 'Este',
-                estado: 'inactivo',
-                ventasMes: 0,
-                totalVentas: 45000
-            }
-        ]);
-    }, []);
-
-    const handleOpenDialog = (vendedor = null) => {
-        if (vendedor) {
-            setEditingVendedor(vendedor);
-            setFormData({
-                nombre: vendedor.nombre,
-                email: vendedor.email,
-                telefono: vendedor.telefono,
-                comision: vendedor.comision.toString(),
-                zona: vendedor.zona,
-                estado: vendedor.estado
-            });
-        } else {
-            setEditingVendedor(null);
-            setFormData({
-                nombre: '',
-                email: '',
-                telefono: '',
-                comision: '',
-                zona: '',
-                estado: 'activo'
-            });
-        }
-        setOpenDialog(true);
-    };
-
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-        setEditingVendedor(null);
-        setFormData({
-            nombre: '',
-            email: '',
-            telefono: '',
-            comision: '',
-            zona: '',
-            estado: 'activo'
-        });
-    };
-
-    const handleInputChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = () => {
-        if (!formData.nombre || !formData.email || !formData.telefono) {
-            setError('Los campos nombre, email y teléfono son obligatorios');
-            return;
-        }
-
-        if (editingVendedor) {
-            // Actualizar vendedor
-            setVendedores(vendedores.map(v =>
-                v.id === editingVendedor.id
-                    ? {
-                        ...v,
-                        nombre: formData.nombre,
-                        email: formData.email,
-                        telefono: formData.telefono,
-                        comision: parseFloat(formData.comision),
-                        zona: formData.zona,
-                        estado: formData.estado
-                    }
-                    : v
-            ));
-            setMensaje('Vendedor actualizado correctamente');
-        } else {
-            // Agregar nuevo vendedor
-            const newVendedor = {
-                id: Date.now(),
-                nombre: formData.nombre,
-                email: formData.email,
-                telefono: formData.telefono,
-                comision: parseFloat(formData.comision),
-                zona: formData.zona,
-                estado: formData.estado,
-                ventasMes: 0,
-                totalVentas: 0
-            };
-            setVendedores([...vendedores, newVendedor]);
-            setMensaje('Vendedor agregado correctamente');
-        }
-
-        handleCloseDialog();
-    };
-
-    const handleDelete = (id) => {
-        setVendedores(vendedores.filter(v => v.id !== id));
-        setMensaje('Vendedor eliminado correctamente');
-    };
-
-    const getEstadoColor = (estado) => {
-        return estado === 'activo' ? 'success' : 'default';
-    };
-
-    const getInitials = (nombre) => {
-        return nombre.split(' ').map(n => n[0]).join('').toUpperCase();
-    };
-
-    return (
-    <Box sx={{ p: 3 }}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                <Typography variant="h4" fontWeight="bold">
-                Gestión de Vendedores
-            </Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<Add />}
-                    onClick={() => handleOpenDialog()}
-                >
-                    Agregar Vendedor
-                </Button>
-            </Box>
-
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Vendedor</TableCell>
-                            <TableCell>Contacto</TableCell>
-                            <TableCell>Zona</TableCell>
-                            <TableCell>Comisión</TableCell>
-                            <TableCell>Ventas Mes</TableCell>
-                            <TableCell>Total Ventas</TableCell>
-                            <TableCell>Estado</TableCell>
-                            <TableCell>Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {vendedores.map((vendedor) => (
-                            <TableRow key={vendedor.id}>
-                                <TableCell>
-                                    <Box display="flex" alignItems="center">
-                                        <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
-                                            {getInitials(vendedor.nombre)}
-                                        </Avatar>
-                                        <Box>
-                                            <Typography variant="subtitle2" fontWeight="bold">
-                                                {vendedor.nombre}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </TableCell>
-                                <TableCell>
-                                    <Box>
-                                        <Box display="flex" alignItems="center" mb={0.5}>
-                                            <Email fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="body2">{vendedor.email}</Typography>
-                                        </Box>
-                                        <Box display="flex" alignItems="center">
-                                            <Phone fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="body2">{vendedor.telefono}</Typography>
-                                        </Box>
-                                    </Box>
-                                </TableCell>
-                                <TableCell>
-                                    <Box display="flex" alignItems="center">
-                                        <LocationOn fontSize="small" sx={{ mr: 0.5, color: 'text.secondary' }} />
-                                        {vendedor.zona}
-                                    </Box>
-                                </TableCell>
-                                <TableCell>{vendedor.comision}%</TableCell>
-                                <TableCell>{vendedor.ventasMes}</TableCell>
-                                <TableCell>${vendedor.totalVentas.toLocaleString()}</TableCell>
-                                <TableCell>
-                                    <Chip
-                                        label={vendedor.estado}
-                                        color={getEstadoColor(vendedor.estado)}
-                                        size="small"
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleOpenDialog(vendedor)}
-                                        color="primary"
-                                    >
-                                        <Edit />
-                                    </IconButton>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleDelete(vendedor.id)}
-                                        color="error"
-                                    >
-                                        <Delete />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            {/* Dialog para agregar/editar vendedor */}
-            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-                <DialogTitle>
-                    {editingVendedor ? 'Editar Vendedor' : 'Agregar Nuevo Vendedor'}
-                </DialogTitle>
-                <DialogContent>
-                    <Box sx={{ pt: 2 }}>
-                        <TextField
-                            fullWidth
-                            label="Nombre completo"
-                            name="nombre"
-                            value={formData.nombre}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Email"
-                            name="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Teléfono"
-                            name="telefono"
-                            value={formData.telefono}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Zona</InputLabel>
-                            <Select
-                                name="zona"
-                                value={formData.zona}
-                                onChange={handleInputChange}
-                                label="Zona"
-                            >
-                                <MenuItem value="Norte">Norte</MenuItem>
-                                <MenuItem value="Sur">Sur</MenuItem>
-                                <MenuItem value="Este">Este</MenuItem>
-                                <MenuItem value="Oeste">Oeste</MenuItem>
-                                <MenuItem value="Centro">Centro</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            fullWidth
-                            label="Comisión (%)"
-                            name="comision"
-                            type="number"
-                            value={formData.comision}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            inputProps={{ min: 0, max: 100 }}
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Estado</InputLabel>
-                            <Select
-                                name="estado"
-                                value={formData.estado}
-                                onChange={handleInputChange}
-                                label="Estado"
-                            >
-                                <MenuItem value="activo">Activo</MenuItem>
-                                <MenuItem value="inactivo">Inactivo</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog}>Cancelar</Button>
-                    <Button onClick={handleSubmit} variant="contained">
-                        {editingVendedor ? 'Actualizar' : 'Agregar'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            {/* Snackbar para mensajes */}
-            <Snackbar
-                open={!!mensaje}
-                autoHideDuration={3000}
-                onClose={() => setMensaje('')}
-            >
-                <Alert severity="success" onClose={() => setMensaje('')}>
-                    {mensaje}
-                </Alert>
-            </Snackbar>
-
-            <Snackbar
-                open={!!error}
-                autoHideDuration={3000}
-                onClose={() => setError('')}
-            >
-                <Alert severity="error" onClose={() => setError('')}>
-                    {error}
-                </Alert>
-            </Snackbar>
-    </Box>
-);
-};
-
-export default Vendedores; 
-        nombre: '',
-        email: '',
-        telefono: '',
-        comision: '',
-        zona: '',
-        estado: 'activo'
-    });
-    const [mensaje, setMensaje] = useState('');
-    const [error, setError] = useState('');
-
-    // Datos de ejemplo
-    useEffect(() => {
-        setVendedores([
-            {
-                id: 1,
-                nombre: 'Carlos Rodríguez',
-                email: 'carlos@empresa.com',
-                telefono: '300-123-4567',
-                comision: 15,
-                zona: 'Norte',
-                estado: 'activo',
-                ventasMes: 25,
-                totalVentas: 125000
-            },
-            {
-                id: 2,
-                nombre: 'Ana Martínez',
-                email: 'ana@empresa.com',
-                telefono: '300-987-6543',
-                comision: 12,
-                zona: 'Sur',
-                estado: 'activo',
-                ventasMes: 18,
-                totalVentas: 89000
-            },
-            {
-                id: 3,
-                nombre: 'Luis González',
-                email: 'luis@empresa.com',
-                telefono: '300-555-1234',
-                comision: 10,
-                zona: 'Este',
-                estado: 'inactivo',
-                ventasMes: 0,
-                totalVentas: 45000
-            }
-        ]);
-    }, []);
-
-    const handleOpenDialog = (vendedor = null) => {
-        if (vendedor) {
-            setEditingVendedor(vendedor);
-            setFormData({
-                nombre: vendedor.nombre,
-                email: vendedor.email,
-                telefono: vendedor.telefono,
-                comision: vendedor.comision.toString(),
-                zona: vendedor.zona,
-                estado: vendedor.estado
-            });
-        } else {
-            setEditingVendedor(null);
-            setFormData({
-                nombre: '',
-                email: '',
-                telefono: '',
-                comision: '',
-                zona: '',
-                estado: 'activo'
-            });
-        }
-        setOpenDialog(true);
-    };
-
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-        setEditingVendedor(null);
-        setFormData({
-            nombre: '',
-            email: '',
-            telefono: '',
-            comision: '',
-            zona: '',
-            estado: 'activo'
-        });
-    };
-
-    const handleInputChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = () => {
-        if (!formData.nombre || !formData.email || !formData.telefono) {
-            setError('Los campos nombre, email y teléfono son obligatorios');
-            return;
-        }
-
-        if (editingVendedor) {
-            // Actualizar vendedor
-            setVendedores(vendedores.map(v =>
-                v.id === editingVendedor.id
-                    ? {
-                        ...v,
-                        nombre: formData.nombre,
-                        email: formData.email,
-                        telefono: formData.telefono,
-                        comision: parseFloat(formData.comision),
-                        zona: formData.zona,
-                        estado: formData.estado
-                    }
-                    : v
-            ));
-            setMensaje('Vendedor actualizado correctamente');
-        } else {
-            // Agregar nuevo vendedor
-            const newVendedor = {
-                id: Date.now(),
-                nombre: formData.nombre,
-                email: formData.email,
-                telefono: formData.telefono,
-                comision: parseFloat(formData.comision),
-                zona: formData.zona,
-                estado: formData.estado,
-                ventasMes: 0,
-                totalVentas: 0
-            };
-            setVendedores([...vendedores, newVendedor]);
-            setMensaje('Vendedor agregado correctamente');
-        }
-
-        handleCloseDialog();
-    };
-
-    const handleDelete = (id) => {
-        setVendedores(vendedores.filter(v => v.id !== id));
-        setMensaje('Vendedor eliminado correctamente');
-    };
-
-    const getEstadoColor = (estado) => {
-        return estado === 'activo' ? 'success' : 'default';
-    };
-
-    const getInitials = (nombre) => {
-        return nombre.split(' ').map(n => n[0]).join('').toUpperCase();
-    };
-
-    return (
-    <Box sx={{ p: 3 }}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                <Typography variant="h4" fontWeight="bold">
-                Gestión de Vendedores
-            </Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<Add />}
-                    onClick={() => handleOpenDialog()}
-                >
-                    Agregar Vendedor
-                </Button>
-            </Box>
-
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Vendedor</TableCell>
-                            <TableCell>Contacto</TableCell>
-                            <TableCell>Zona</TableCell>
-                            <TableCell>Comisión</TableCell>
-                            <TableCell>Ventas Mes</TableCell>
-                            <TableCell>Total Ventas</TableCell>
-                            <TableCell>Estado</TableCell>
-                            <TableCell>Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {vendedores.map((vendedor) => (
-                            <TableRow key={vendedor.id}>
-                                <TableCell>
-                                    <Box display="flex" alignItems="center">
-                                        <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
-                                            {getInitials(vendedor.nombre)}
-                                        </Avatar>
-                                        <Box>
-                                            <Typography variant="subtitle2" fontWeight="bold">
-                                                {vendedor.nombre}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </TableCell>
-                                <TableCell>
-                                    <Box>
-                                        <Box display="flex" alignItems="center" mb={0.5}>
-                                            <Email fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="body2">{vendedor.email}</Typography>
-                                        </Box>
-                                        <Box display="flex" alignItems="center">
-                                            <Phone fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="body2">{vendedor.telefono}</Typography>
-                                        </Box>
-                                    </Box>
-                                </TableCell>
-                                <TableCell>
-                                    <Box display="flex" alignItems="center">
-                                        <LocationOn fontSize="small" sx={{ mr: 0.5, color: 'text.secondary' }} />
-                                        {vendedor.zona}
-                                    </Box>
-                                </TableCell>
-                                <TableCell>{vendedor.comision}%</TableCell>
-                                <TableCell>{vendedor.ventasMes}</TableCell>
-                                <TableCell>${vendedor.totalVentas.toLocaleString()}</TableCell>
-                                <TableCell>
-                                    <Chip
-                                        label={vendedor.estado}
-                                        color={getEstadoColor(vendedor.estado)}
-                                        size="small"
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleOpenDialog(vendedor)}
-                                        color="primary"
-                                    >
-                                        <Edit />
-                                    </IconButton>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleDelete(vendedor.id)}
-                                        color="error"
-                                    >
-                                        <Delete />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            {/* Dialog para agregar/editar vendedor */}
-            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-                <DialogTitle>
-                    {editingVendedor ? 'Editar Vendedor' : 'Agregar Nuevo Vendedor'}
-                </DialogTitle>
-                <DialogContent>
-                    <Box sx={{ pt: 2 }}>
-                        <TextField
-                            fullWidth
-                            label="Nombre completo"
-                            name="nombre"
-                            value={formData.nombre}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Email"
-                            name="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Teléfono"
-                            name="telefono"
-                            value={formData.telefono}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Zona</InputLabel>
-                            <Select
-                                name="zona"
-                                value={formData.zona}
-                                onChange={handleInputChange}
-                                label="Zona"
-                            >
-                                <MenuItem value="Norte">Norte</MenuItem>
-                                <MenuItem value="Sur">Sur</MenuItem>
-                                <MenuItem value="Este">Este</MenuItem>
-                                <MenuItem value="Oeste">Oeste</MenuItem>
-                                <MenuItem value="Centro">Centro</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            fullWidth
-                            label="Comisión (%)"
-                            name="comision"
-                            type="number"
-                            value={formData.comision}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            inputProps={{ min: 0, max: 100 }}
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Estado</InputLabel>
-                            <Select
-                                name="estado"
-                                value={formData.estado}
-                                onChange={handleInputChange}
-                                label="Estado"
-                            >
-                                <MenuItem value="activo">Activo</MenuItem>
-                                <MenuItem value="inactivo">Inactivo</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog}>Cancelar</Button>
-                    <Button onClick={handleSubmit} variant="contained">
-                        {editingVendedor ? 'Actualizar' : 'Agregar'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            {/* Snackbar para mensajes */}
-            <Snackbar
-                open={!!mensaje}
-                autoHideDuration={3000}
-                onClose={() => setMensaje('')}
-            >
-                <Alert severity="success" onClose={() => setMensaje('')}>
-                    {mensaje}
-                </Alert>
-            </Snackbar>
-
-            <Snackbar
-                open={!!error}
-                autoHideDuration={3000}
-                onClose={() => setError('')}
-            >
-                <Alert severity="error" onClose={() => setError('')}>
-                    {error}
-                </Alert>
-            </Snackbar>
-    </Box>
-);
-};
-
-export default Vendedores; 
-        nombre: '',
-        email: '',
-        telefono: '',
-        comision: '',
-        zona: '',
-        estado: 'activo'
-    });
-    const [mensaje, setMensaje] = useState('');
-    const [error, setError] = useState('');
-
-    // Datos de ejemplo
-    useEffect(() => {
-        setVendedores([
-            {
-                id: 1,
-                nombre: 'Carlos Rodríguez',
-                email: 'carlos@empresa.com',
-                telefono: '300-123-4567',
-                comision: 15,
-                zona: 'Norte',
-                estado: 'activo',
-                ventasMes: 25,
-                totalVentas: 125000
-            },
-            {
-                id: 2,
-                nombre: 'Ana Martínez',
-                email: 'ana@empresa.com',
-                telefono: '300-987-6543',
-                comision: 12,
-                zona: 'Sur',
-                estado: 'activo',
-                ventasMes: 18,
-                totalVentas: 89000
-            },
-            {
-                id: 3,
-                nombre: 'Luis González',
-                email: 'luis@empresa.com',
-                telefono: '300-555-1234',
-                comision: 10,
-                zona: 'Este',
-                estado: 'inactivo',
-                ventasMes: 0,
-                totalVentas: 45000
-            }
-        ]);
-    }, []);
-
-    const handleOpenDialog = (vendedor = null) => {
-        if (vendedor) {
-            setEditingVendedor(vendedor);
-            setFormData({
-                nombre: vendedor.nombre,
-                email: vendedor.email,
-                telefono: vendedor.telefono,
-                comision: vendedor.comision.toString(),
-                zona: vendedor.zona,
-                estado: vendedor.estado
-            });
-        } else {
-            setEditingVendedor(null);
-            setFormData({
-                nombre: '',
-                email: '',
-                telefono: '',
-                comision: '',
-                zona: '',
-                estado: 'activo'
-            });
-        }
-        setOpenDialog(true);
-    };
-
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-        setEditingVendedor(null);
-        setFormData({
-            nombre: '',
-            email: '',
-            telefono: '',
-            comision: '',
-            zona: '',
-            estado: 'activo'
-        });
-    };
-
-    const handleInputChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = () => {
-        if (!formData.nombre || !formData.email || !formData.telefono) {
-            setError('Los campos nombre, email y teléfono son obligatorios');
-            return;
-        }
-
-        if (editingVendedor) {
-            // Actualizar vendedor
-            setVendedores(vendedores.map(v =>
-                v.id === editingVendedor.id
-                    ? {
-                        ...v,
-                        nombre: formData.nombre,
-                        email: formData.email,
-                        telefono: formData.telefono,
-                        comision: parseFloat(formData.comision),
-                        zona: formData.zona,
-                        estado: formData.estado
-                    }
-                    : v
-            ));
-            setMensaje('Vendedor actualizado correctamente');
-        } else {
-            // Agregar nuevo vendedor
-            const newVendedor = {
-                id: Date.now(),
-                nombre: formData.nombre,
-                email: formData.email,
-                telefono: formData.telefono,
-                comision: parseFloat(formData.comision),
-                zona: formData.zona,
-                estado: formData.estado,
-                ventasMes: 0,
-                totalVentas: 0
-            };
-            setVendedores([...vendedores, newVendedor]);
-            setMensaje('Vendedor agregado correctamente');
-        }
-
-        handleCloseDialog();
-    };
-
-    const handleDelete = (id) => {
-        setVendedores(vendedores.filter(v => v.id !== id));
-        setMensaje('Vendedor eliminado correctamente');
-    };
-
-    const getEstadoColor = (estado) => {
-        return estado === 'activo' ? 'success' : 'default';
-    };
-
-    const getInitials = (nombre) => {
-        return nombre.split(' ').map(n => n[0]).join('').toUpperCase();
-    };
-
-    return (
-    <Box sx={{ p: 3 }}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                <Typography variant="h4" fontWeight="bold">
-                Gestión de Vendedores
-            </Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<Add />}
-                    onClick={() => handleOpenDialog()}
-                >
-                    Agregar Vendedor
-                </Button>
-            </Box>
-
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Vendedor</TableCell>
-                            <TableCell>Contacto</TableCell>
-                            <TableCell>Zona</TableCell>
-                            <TableCell>Comisión</TableCell>
-                            <TableCell>Ventas Mes</TableCell>
-                            <TableCell>Total Ventas</TableCell>
-                            <TableCell>Estado</TableCell>
-                            <TableCell>Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {vendedores.map((vendedor) => (
-                            <TableRow key={vendedor.id}>
-                                <TableCell>
-                                    <Box display="flex" alignItems="center">
-                                        <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
-                                            {getInitials(vendedor.nombre)}
-                                        </Avatar>
-                                        <Box>
-                                            <Typography variant="subtitle2" fontWeight="bold">
-                                                {vendedor.nombre}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </TableCell>
-                                <TableCell>
-                                    <Box>
-                                        <Box display="flex" alignItems="center" mb={0.5}>
-                                            <Email fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="body2">{vendedor.email}</Typography>
-                                        </Box>
-                                        <Box display="flex" alignItems="center">
-                                            <Phone fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                            <Typography variant="body2">{vendedor.telefono}</Typography>
-                                        </Box>
-                                    </Box>
-                                </TableCell>
-                                <TableCell>
-                                    <Box display="flex" alignItems="center">
-                                        <LocationOn fontSize="small" sx={{ mr: 0.5, color: 'text.secondary' }} />
-                                        {vendedor.zona}
-                                    </Box>
-                                </TableCell>
-                                <TableCell>{vendedor.comision}%</TableCell>
-                                <TableCell>{vendedor.ventasMes}</TableCell>
-                                <TableCell>${vendedor.totalVentas.toLocaleString()}</TableCell>
-                                <TableCell>
-                                    <Chip
-                                        label={vendedor.estado}
-                                        color={getEstadoColor(vendedor.estado)}
-                                        size="small"
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleOpenDialog(vendedor)}
-                                        color="primary"
-                                    >
-                                        <Edit />
-                                    </IconButton>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleDelete(vendedor.id)}
-                                        color="error"
-                                    >
-                                        <Delete />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            {/* Dialog para agregar/editar vendedor */}
-            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-                <DialogTitle>
-                    {editingVendedor ? 'Editar Vendedor' : 'Agregar Nuevo Vendedor'}
-                </DialogTitle>
-                <DialogContent>
-                    <Box sx={{ pt: 2 }}>
-                        <TextField
-                            fullWidth
-                            label="Nombre completo"
-                            name="nombre"
-                            value={formData.nombre}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Email"
-                            name="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Teléfono"
-                            name="telefono"
-                            value={formData.telefono}
-                            onChange={handleInputChange}
-                            margin="normal"
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Zona</InputLabel>
-                            <Select
-                                name="zona"
-                                value={formData.zona}
-                                onChange={handleInputChange}
-                                label="Zona"
-                            >
-                                <MenuItem value="Norte">Norte</MenuItem>
-                                <MenuItem value="Sur">Sur</MenuItem>
-                                <MenuItem value="Este">Este</MenuItem>
-                                <MenuItem value="Oeste">Oeste</MenuItem>
-                                <MenuItem value="Centro">Centro</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            fullWidth
-                            label="Comisión (%)"
-                            name="comision"
-                            type="number"
-                            value={formData.comision}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            inputProps={{ min: 0, max: 100 }}
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Estado</InputLabel>
-                            <Select
-                                name="estado"
-                                value={formData.estado}
-                                onChange={handleInputChange}
-                                label="Estado"
-                            >
-                                <MenuItem value="activo">Activo</MenuItem>
-                                <MenuItem value="inactivo">Inactivo</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog}>Cancelar</Button>
-                    <Button onClick={handleSubmit} variant="contained">
-                        {editingVendedor ? 'Actualizar' : 'Agregar'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            {/* Snackbar para mensajes */}
-            <Snackbar
-                open={!!mensaje}
-                autoHideDuration={3000}
-                onClose={() => setMensaje('')}
-            >
-                <Alert severity="success" onClose={() => setMensaje('')}>
-                    {mensaje}
-                </Alert>
-            </Snackbar>
-
-            <Snackbar
-                open={!!error}
-                autoHideDuration={3000}
-                onClose={() => setError('')}
-            >
-                <Alert severity="error" onClose={() => setError('')}>
-                    {error}
-                </Alert>
-            </Snackbar>
-    </Box>
-);
+        </Box>
+    );
 };
 
 export default Vendedores; 
