@@ -10,8 +10,19 @@ dotenv.config();
 
 const app = express();
 
+// Configuración de CORS
+const corsOptions = {
+    origin: [
+        'http://localhost:3000',
+        'https://sistema-ventas-frontend.netlify.app',
+        process.env.CORS_ORIGIN
+    ].filter(Boolean),
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Rutas

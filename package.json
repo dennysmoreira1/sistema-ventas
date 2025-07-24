@@ -1,12 +1,13 @@
 {
   "name": "sistema-ventas",
   "version": "1.0.0",
-  "description": "Sistema completo de gestión de ventas con React y Node.js",
+  "description": "Sistema de gestión de ventas completo",
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
+    "start:render": "cd backend && npm start",
     "build": "npm run build:frontend",
     "build:frontend": "cd frontend && npm run build",
     "build:backend": "cd backend && npm run build",
@@ -22,33 +23,28 @@
     "lint:frontend": "cd frontend && npm run lint"
   },
   "keywords": [
+    "sales",
+    "management",
     "react",
     "nodejs",
     "express",
-    "material-ui",
-    "ventas",
-    "sistema",
-    "gestión"
+    "mongodb"
   ],
   "author": "Tu Nombre",
   "license": "MIT",
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  },
   "engines": {
     "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "npm": ">=9.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tu-usuario/sistema-ventas.git"
+    "url": "https://github.com/dennysmoreira1/sistema-ventas"
   },
   "bugs": {
-    "url": "https://github.com/tu-usuario/sistema-ventas/issues"
+    "url": "https://github.com/dennysmoreira1/sistema-ventas/issues"
   },
-  "homepage": "https://github.com/tu-usuario/sistema-ventas#readme",
-  "dependencies": {
-    "@mui/icons-material": "^7.2.0",
-    "@mui/material": "^7.2.0"
+  "homepage": "https://github.com/dennysmoreira1/sistema-ventas#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
