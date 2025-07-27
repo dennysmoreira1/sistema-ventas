@@ -1,8 +1,10 @@
 import express from 'express';
-import { registrarVenta, listarVentas } from '../controllers/ventasController.js';
+import { listarVentas, buscarVenta } from '../controllers/ventasController.js';
+import { authenticateToken } from '../middleware/auth.js';
+
 const router = express.Router();
 
-router.post('/', registrarVenta);
-router.get('/', listarVentas);
+router.get('/', authenticateToken, listarVentas);
+router.get('/buscar', authenticateToken, buscarVenta);
 
 export default router; 

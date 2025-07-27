@@ -32,7 +32,7 @@ const ReporteSalidas = () => {
             </Typography>
 
             <Grid container spacing={3} sx={{ mb: 3 }}>
-                <Grid xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
@@ -50,7 +50,7 @@ const ReporteSalidas = () => {
                     </Card>
                 </Grid>
 
-                <Grid xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
@@ -68,7 +68,7 @@ const ReporteSalidas = () => {
                     </Card>
                 </Grid>
 
-                <Grid xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
@@ -86,7 +86,7 @@ const ReporteSalidas = () => {
                     </Card>
                 </Grid>
 
-                <Grid xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
@@ -110,7 +110,7 @@ const ReporteSalidas = () => {
                     Filtros
                 </Typography>
                 <Grid container spacing={2}>
-                    <Grid xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormControl fullWidth>
                             <InputLabel>Tipo de Gasto</InputLabel>
                             <Select
@@ -126,7 +126,7 @@ const ReporteSalidas = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormControl fullWidth>
                             <InputLabel>Estado</InputLabel>
                             <Select
@@ -141,7 +141,7 @@ const ReporteSalidas = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <TextField
                             fullWidth
                             label="Fecha"
@@ -152,7 +152,7 @@ const ReporteSalidas = () => {
                             InputLabelProps={{ shrink: true }}
                         />
                     </Grid>
-                    <Grid xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <Box display="flex" gap={1}>
                             <Button
                                 variant="contained"

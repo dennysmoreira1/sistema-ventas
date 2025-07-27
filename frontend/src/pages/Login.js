@@ -7,6 +7,7 @@ import { LockOutlined, Visibility, VisibilityOff, Refresh } from '@mui/icons-mat
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { clearStorage } from '../utils/clearStorage';
+import Logo from '../components/Logo';
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -112,16 +113,14 @@ const Login = () => {
                         maxWidth: 400
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                        <LockOutlined />
-                    </Avatar>
+                    <Logo />
 
-                    <Typography component="h1" variant="h5" fontWeight="bold" gutterBottom>
-                        Sistema de Ventas
+                    <Typography component="h1" variant="h5" fontWeight="bold" gutterBottom sx={{ color: 'primary.main' }}>
+                        Iniciar Sesión
                     </Typography>
 
                     <Typography variant="body2" color="textSecondary" textAlign="center" mb={3}>
-                        Inicia sesión para acceder al panel de administración
+                        Accede a tu panel de gestión de ventas
                     </Typography>
 
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>

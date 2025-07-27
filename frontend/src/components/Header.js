@@ -7,6 +7,7 @@ import {
     AccountCircle, Logout, Settings, Person
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
+import Logo from './Logo';
 
 const Header = () => {
     const { user, logout, hasPermission } = useAuth();
@@ -43,9 +44,7 @@ const Header = () => {
             borderColor: 'divider',
             height: 64
         }}>
-            <Typography variant="h6" fontWeight="bold">
-                Sistema de Ventas
-            </Typography>
+            <Logo />
 
             {user && (
                 <Box display="flex" alignItems="center" gap={2}>

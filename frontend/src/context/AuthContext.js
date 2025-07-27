@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
     const [initialized, setInitialized] = useState(false);
 
-    // const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
     // Función para limpiar datos de sesión
     const clearSession = useCallback(() => {
@@ -54,30 +54,6 @@ export const AuthProvider = ({ children }) => {
         try {
             setLoading(true);
 
-            // Mock login para testing - puedes usar cualquier email/password
-            if (userData.email && userData.password) {
-                const mockUser = {
-                    id: 1,
-                    nombre: 'Usuario Demo',
-                    email: userData.email,
-                    rol: 'Administrador',
-                    permisos: ['admin', 'ventas', 'productos', 'clientes', 'reportes']
-                };
-
-                const mockToken = 'mock-token-' + Date.now();
-
-                setUser(mockUser);
-                setToken(mockToken);
-                localStorage.setItem('user', JSON.stringify(mockUser));
-                localStorage.setItem('token', mockToken);
-
-                return { success: true };
-            } else {
-                return { success: false, error: 'Email y contraseña son requeridos' };
-            }
-
-            // Código original del backend (comentado por ahora)
-            /*
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
@@ -100,14 +76,13 @@ export const AuthProvider = ({ children }) => {
             } else {
                 return { success: false, error: data.error };
             }
-            */
         } catch (error) {
             console.error('Error en login:', error);
             return { success: false, error: 'Error de conexión' };
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [API_URL]);
 
     const logout = useCallback(() => {
         clearSession();

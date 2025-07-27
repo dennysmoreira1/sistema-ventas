@@ -36,6 +36,6 @@
         }
     ],
     "env": {
-        "REACT_APP_API_URL": "https://tu-backend-url.herokuapp.com"
+        "REACT_APP_API_URL": "https://sales-management-api-k8kg.onrender.com"
     }
 }

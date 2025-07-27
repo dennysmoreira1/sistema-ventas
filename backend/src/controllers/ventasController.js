@@ -9,4 +9,15 @@ export function registrarVenta(req, res) {
 
 export function listarVentas(req, res) {
     res.json(ventas);
+}
+
+export function buscarVenta(req, res) {
+    const { id } = req.query;
+    const venta = ventas.find(v => v.id == id);
+
+    if (!venta) {
+        return res.status(404).json({ error: 'Venta no encontrada' });
+    }
+
+    res.json(venta);
 } 

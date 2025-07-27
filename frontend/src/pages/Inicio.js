@@ -9,6 +9,7 @@ import {
     AttachMoney, Assessment
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
+import Logo from '../components/Logo';
 
 const Inicio = () => {
     const { user } = useAuth();
@@ -68,12 +69,20 @@ const Inicio = () => {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Bienvenido, {user?.nombre || 'Usuario'}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+                <Logo />
+                <Box>
+                    <Typography variant="h4" fontWeight="bold" gutterBottom>
+                        Bienvenido, {user?.nombre || 'Usuario'}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                        Aquí tienes un resumen de tu negocio
+                    </Typography>
+                </Box>
+            </Box>
 
             <Grid container spacing={3} sx={{ mb: 4 }}>
-                <Grid xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
@@ -94,7 +103,7 @@ const Inicio = () => {
                     </Card>
                 </Grid>
 
-                <Grid xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
@@ -115,7 +124,7 @@ const Inicio = () => {
                     </Card>
                 </Grid>
 
-                <Grid xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
@@ -136,7 +145,7 @@ const Inicio = () => {
                     </Card>
                 </Grid>
 
-                <Grid xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <Card>
                         <CardContent>
                             <Box display="flex" alignItems="center">
@@ -159,7 +168,7 @@ const Inicio = () => {
             </Grid>
 
             <Grid container spacing={3}>
-                <Grid xs={12} md={6}>
+                <Grid item xs={12} md={6}>
                     <Card>
                         <CardContent>
                             <Typography variant="h6" fontWeight="bold" gutterBottom>
@@ -199,7 +208,7 @@ const Inicio = () => {
                     </Card>
                 </Grid>
 
-                <Grid xs={12} md={6}>
+                <Grid item xs={12} md={6}>
                     <Card>
                         <CardContent>
                             <Typography variant="h6" fontWeight="bold" gutterBottom>

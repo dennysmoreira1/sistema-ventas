@@ -1,125 +1,121 @@
 # Sistema de Gestión de Ventas
 
-Un sistema completo de gestión de ventas desarrollado con React, Node.js y Material-UI.
+Un sistema completo de gestión de ventas desarrollado con React (frontend) y Node.js/Express (backend).
 
 ## 🚀 Características
 
-### 📊 Dashboard Completo
-- **Panel General**: Vista general del negocio
-- **Gestión de Usuarios**: Administración de usuarios, vendedores, clientes y proveedores
-- **Inventario**: Control de categorías, marcas y productos
-- **Ventas**: Registro, control y reportes de ventas
-- **Finanzas**: Gestión de gastos y reportes financieros
-- **Seguridad**: Control de acceso y permisos
+- **Autenticación JWT** - Sistema seguro de login/logout
+- **Gestión de Usuarios** - Roles y permisos
+- **Gestión de Clientes** - CRUD completo
+- **Gestión de Productos** - Inventario y categorías
+- **Gestión de Ventas** - Registro y control de ventas
+- **Reportes** - Ventas y salidas
+- **Interfaz Moderna** - Material-UI con diseño responsivo
 
-### 🔐 Sistema de Autenticación
-- **Login seguro** con JWT
-- **Roles diferenciados**: Administrador, Vendedor, Inventario
-- **Control de permisos** por módulo
-- **Sesiones persistentes**
-
-### 📱 Diseño Responsivo
-- **Interfaz moderna** con Material-UI
-- **Adaptable** a móviles, tablets y desktop
-- **Navegación intuitiva** con sidebar
-
-## 🛠️ Tecnologías Utilizadas
+## 🛠️ Tecnologías
 
 ### Frontend
-- **React 18** - Biblioteca de interfaz de usuario
-- **Material-UI 5** - Componentes de UI
-- **React Router 6** - Navegación
-- **Context API** - Estado global
+- React 18
+- Material-UI (MUI)
+- React Router DOM
+- Context API para estado global
 
 ### Backend
-- **Node.js** - Runtime de JavaScript
-- **Express.js** - Framework web
-- **JWT** - Autenticación
-- **bcryptjs** - Encriptación de contraseñas
-- **CORS** - Cross-origin resource sharing
+- Node.js
+- Express.js
+- JWT para autenticación
+- bcryptjs para encriptación
+- CORS configurado
 
-## 📦 Instalación
+## 📋 Requisitos Previos
 
-### Prerrequisitos
-- Node.js (versión 18 o superior)
-- npm o yarn
+- Node.js >= 18.0.0
+- npm >= 9.0.0
 
-### Pasos de Instalación
+## 🔧 Instalación
 
-1. **Clonar el repositorio**
+### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/sistema-ventas.git
+git clone https://github.com/dennysmoreira1/sistema-ventas.git
 cd sistema-ventas
 ```
 
-2. **Instalar dependencias del backend**
+### 2. Instalar dependencias
 ```bash
-cd backend
-npm install
+# Instalar todas las dependencias (backend y frontend)
+npm run install:all
+
+# O instalar por separado:
+# Backend
+cd backend && npm install
+
+# Frontend
+cd frontend && npm install
 ```
 
-3. **Instalar dependencias del frontend**
-```bash
-cd ../frontend
-npm install
+### 3. Configurar variables de entorno
+
+#### Backend (.env)
+Crear archivo `.env` en la carpeta `backend/`:
+```env
+NODE_ENV=development
+PORT=4000
+JWT_SECRET=tu_secreto_jwt_super_seguro_aqui_2024
+JWT_EXPIRES_IN=24h
+CORS_ORIGIN=http://localhost:3000
 ```
 
-4. **Configurar variables de entorno**
-```bash
-# En el directorio backend, crear archivo .env
-cp .env.example .env
-# Editar .env con tus configuraciones
+#### Frontend (.env)
+Crear archivo `.env` en la carpeta `frontend/`:
+```env
+REACT_APP_API_URL=http://localhost:4000/api
 ```
 
-## 🚀 Ejecución
+### 4. Ejecutar el proyecto
 
-### Desarrollo
-
-1. **Iniciar el backend**
+#### Desarrollo (ambos servicios)
 ```bash
-cd backend
+npm run dev
+```
+
+#### Solo Backend
+```bash
+npm run dev:backend
+```
+
+#### Solo Frontend
+```bash
+npm run dev:frontend
+```
+
+#### Producción
+```bash
 npm start
-# El servidor se ejecutará en http://localhost:4000
 ```
 
-2. **Iniciar el frontend**
-```bash
-cd frontend
-npm start
-# La aplicación se abrirá en http://localhost:3000
-```
+## 🔐 Credenciales de Prueba
 
-### Producción
+### Usuarios disponibles:
+1. **Administrador**
+   - Email: `admin@empresa.com`
+   - Password: `admin123`
+   - Permisos: Todos
 
-1. **Construir el frontend**
-```bash
-cd frontend
-npm run build
-```
+2. **Vendedor**
+   - Email: `juan@empresa.com`
+   - Password: `vendedor123`
+   - Permisos: Productos, Ventas
 
-2. **Desplegar el backend**
-```bash
-cd backend
-npm run build
-npm start
-```
+3. **Inventario**
+   - Email: `maria@empresa.com`
+   - Password: `inventario123`
+   - Permisos: Productos
 
-## 👥 Usuarios de Demo
+## 🌐 URLs
 
-### Administrador
-- **Email**: admin@empresa.com
-- **Contraseña**: admin123
-- **Permisos**: Acceso completo al sistema
-
-### Vendedor
-- **Email**: juan@empresa.com
-- **Contraseña**: vendedor123
-- **Permisos**: Gestión de ventas y clientes
-
-### Inventario
-- **Email**: maria@empresa.com
-- **Contraseña**: inventario123
-- **Permisos**: Gestión de productos e inventario
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:4000/api
+- **Health Check**: http://localhost:4000/api/health
 
 ## 📁 Estructura del Proyecto
 
@@ -129,56 +125,83 @@ sistema-ventas/
 │   ├── src/
 │   │   ├── controllers/
 │   │   ├── routes/
+│   │   ├── middleware/
 │   │   └── index.js
 │   ├── package.json
-│   └── .env
+│   └── start.js
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
 │   │   ├── context/
-│   │   └── App.js
+│   │   └── utils/
 │   └── package.json
-└── README.md
+└── package.json
 ```
-
-## 🔧 Configuración
-
-### Variables de Entorno (Backend)
-
-Crear archivo `.env` en el directorio `backend/`:
-
-```env
-PORT=4000
-JWT_SECRET=tu_secreto_jwt_aqui
-NODE_ENV=development
-```
-
-### Configuración del Frontend
-
-El frontend está configurado para conectarse al backend en `http://localhost:4000` por defecto.
 
 ## 🚀 Despliegue
 
-### Heroku
+### Backend (Render)
+- Configurado para desplegar en Render
+- Usar el archivo `render.yaml` para configuración automática
 
-1. **Crear aplicación en Heroku**
-2. **Configurar variables de entorno**
-3. **Desplegar backend y frontend**
+### Frontend (Netlify/Vercel)
+- Configurado para desplegar en Netlify o Vercel
+- Usar `netlify.toml` o `vercel.json` respectivamente
 
-### Vercel
+## 🔧 Scripts Disponibles
 
-1. **Conectar repositorio a Vercel**
-2. **Configurar build settings**
-3. **Desplegar automáticamente**
+```bash
+# Desarrollo
+npm run dev                    # Ambos servicios
+npm run dev:backend           # Solo backend
+npm run dev:frontend          # Solo frontend
 
-### Netlify
+# Producción
+npm start                     # Ambos servicios
+npm run start:backend         # Solo backend
+npm run start:frontend        # Solo frontend
 
-1. **Conectar repositorio a Netlify**
-2. **Configurar build command**
-3. **Desplegar**
+# Build
+npm run build                 # Frontend
+npm run build:frontend        # Frontend
+npm run build:backend         # Backend
 
-## 🤝 Contribución
+# Testing
+npm test                      # Ambos
+npm run test:backend          # Backend
+npm run test:frontend         # Frontend
+
+# Linting
+npm run lint                  # Ambos
+npm run lint:backend          # Backend
+npm run lint:frontend         # Frontend
+```
+
+## 🐛 Solución de Problemas
+
+### Error de CORS
+- Verificar que `CORS_ORIGIN` en backend coincida con la URL del frontend
+
+### Error de Autenticación
+- Verificar que `JWT_SECRET` esté configurado
+- Limpiar localStorage si hay problemas de tokens
+
+### Error de Dependencias
+```bash
+# Limpiar cache de npm
+npm cache clean --force
+
+# Reinstalar dependencias
+rm -rf node_modules package-lock.json
+npm install
+```
+
+## 📝 Licencia
+
+MIT License - ver archivo LICENSE para más detalles.
+
+## 🤝 Contribuir
 
 1. Fork el proyecto
 2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
@@ -186,20 +209,6 @@ El frontend está configurado para conectarse al backend en `http://localhost:40
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abrir un Pull Request
 
-## 📝 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
 ## 📞 Soporte
 
-Si tienes alguna pregunta o problema, por favor abre un issue en el repositorio.
-
-## 🙏 Agradecimientos
-
-- Material-UI por los componentes de UI
-- React Router por la navegación
-- Express.js por el framework del backend
-
----
-
-**Desarrollado con ❤️ para la gestión eficiente de ventas** 
+Para soporte, email: soporte@empresa.com o crear un issue en GitHub. 

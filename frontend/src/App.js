@@ -22,6 +22,8 @@ import SalidasGastos from './pages/SalidasGastos';
 import ReporteSalidas from './pages/ReporteSalidas';
 import Perfil from './pages/Perfil';
 import Configuracion from './pages/Configuracion';
+import Permisos from './pages/Permisos';
+import Logs from './pages/Logs';
 
 // Componente para el layout principal con sidebar y header
 const MainLayout = ({ children }) => {
@@ -183,6 +185,22 @@ const AppContent = () => {
         <ProtectedRoute requiredPermissions={['admin']}>
           <MainLayout>
             <Configuracion />
+          </MainLayout>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/permisos" element={
+        <ProtectedRoute requiredPermissions={['admin']}>
+          <MainLayout>
+            <Permisos />
+          </MainLayout>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/logs" element={
+        <ProtectedRoute requiredPermissions={['admin']}>
+          <MainLayout>
+            <Logs />
           </MainLayout>
         </ProtectedRoute>
       } />
