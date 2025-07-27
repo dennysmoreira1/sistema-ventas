@@ -6,7 +6,7 @@ import {
     IconButton, Alert, Grid
 } from '@mui/material';
 import {
-    Search, FilterList, Download, Visibility, Block,
+    FilterList, Download, Visibility, Block,
     CheckCircle, Warning, Error, Info
 } from '@mui/icons-material';
 

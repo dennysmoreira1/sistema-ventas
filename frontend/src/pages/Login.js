@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
     Box, Typography, Paper, TextField, Button, Alert, Snackbar,
-    Container, Avatar, IconButton
+    Container, IconButton
 } from '@mui/material';
-import { LockOutlined, Visibility, VisibilityOff, Refresh } from '@mui/icons-material';
+import { Visibility, VisibilityOff, Refresh } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { clearStorage } from '../utils/clearStorage';
